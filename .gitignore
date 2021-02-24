@@ -1,5 +1,7 @@
 # Byte-compiled / optimized / DLL files
 config.py
+geckodriver.log
+.vscode
 .DS_store
 __pycache__/
 *.py[cod]
