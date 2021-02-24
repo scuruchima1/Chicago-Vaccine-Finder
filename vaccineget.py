@@ -40,6 +40,68 @@ def zocdocCheck():
     driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[6]/div[4]/div[2]/div[2]/label/span[1]/input').click()
     driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[6]/button').click()
     driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[8]/button').click()
+<<<<<<< HEAD
+    # if driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[1]/div/div[2]/div/div').text != "No upcoming appointments available":
+    #     driver.quit()
+    #     return True
+    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[2]/div/div[2]/div/div').text != "No upcoming appointments available":
+    #     driver.quit()
+    #     return True
+    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[3]/div/div[2]/div/div').text != "No upcoming appointments available":
+    #     driver.quit()
+    #     return True
+    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[4]/div/div[2]/div/div').text != "No upcoming appointments available":
+    #     driver.quit()
+    #     return True
+    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[5]/div/div[2]/div/div').text != "No upcoming appointments available":
+    #     driver.quit()
+    #     return True
+    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[6]/div/div[2]/div/div').text != "No upcoming appointments available":
+    #     driver.quit()
+    #     return True
+    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[7]/div/div[2]/div/div').text != "No upcoming appointments available":
+    #     driver.quit()
+    #     return True
+    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[8]/div/div[2]/div/div').text != "No upcoming appointments available":
+    #     driver.quit()
+    #     return True
+    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[9]/div/div[2]/div/div').text != "No upcoming appointments available":
+    #     driver.quit()
+    #     return True
+    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[10]/div/div[2]/div/div').text != "No upcoming appointments available":
+    #     driver.quit()
+    #     return True
+    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[11]/div/div[2]/div/div').text != "No upcoming appointments available":
+    #     driver.quit()
+    #     return True
+    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[12]/div/div[2]/div/div').text != "No upcoming appointments available":
+    #     driver.quit()
+    #     return True
+    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[13]/div/div[2]/div/div').text != "No upcoming appointments available":
+    #     driver.quit()
+    #     return True
+    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[14]/div/div[2]/div/div').text != "No upcoming appointments available":
+    #     driver.quit()
+    #     return True
+    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[15]/div/div[2]/div/div').text != "No upcoming appointments available":
+    #     driver.quit()
+    #     return True
+    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[16]/div/div[2]/div/div').text != "No upcoming appointments available":
+    #     driver.quit()
+    #     return True
+    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[17]/div/div[2]/div/div').text != "No upcoming appointments available":
+    #     driver.quit()
+    #     return True
+
+        # making for loop
+    for articleNumber in range(1,18):
+        path = '//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[' + str(articleNumber) + ']/div/div[2]/div/div'
+        if driver.find_element_by_xpath(path).text != "No upcoming appointments available":
+            driver.quit()
+            return True
+
+    time.sleep(3)
+=======
     if driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[1]/div/div[2]/div/div').text != "No upcoming appointments available":
         driver.quit()
         return True
@@ -91,6 +153,10 @@ def zocdocCheck():
     elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[17]/div/div[2]/div/div').text != "No upcoming appointments available":
         driver.quit()
         return True
+<<<<<<< Updated upstream
+=======
+>>>>>>> 549fc52e5b9c8ef29b7867cc4abde07a5a6ac15e
+>>>>>>> Stashed changes
     driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/nav/span[2]/a').click()
     time.sleep(2)
     if driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article/div/div[2]/div/div').text != "No upcoming appointments available":
