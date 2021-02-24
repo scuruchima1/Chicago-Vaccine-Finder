@@ -4,6 +4,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.keys import Keys
 import time
 import pprint
+import config 
 import vacdiscord
 
 # zocdoc - https://www.zocdoc.com/vaccine/search/IL?flavor=state-search
@@ -22,7 +23,7 @@ import vacdiscord
 vacdiscord = vacdiscord.VaccineNotification()
 driver = webdriver.FirefoxProfile()
 driver.set_preference('dom.webdriver.enabled',False)
-driver = webdriver.Firefox(executable_path='/usr/local/bin/geckodriver',firefox_profile=driver)
+driver = webdriver.Firefox(executable_path=config.geckopath,firefox_profile=driver)
 
 def zocdocCheck():
     driver.get("https://www.zocdoc.com/vaccine")
@@ -45,15 +46,18 @@ def zocdocCheck():
     for articleNumber in range(1,18):
         path = '//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[' + str(articleNumber) + ']/div/div[2]/div/div'
         if driver.find_element_by_xpath(path).text != "No upcoming appointments available":
+            print("ZocDoc Ran")
             driver.quit()
             return True
 
     driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/nav/span[2]/a').click()
     time.sleep(2)
     if driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article/div/div[2]/div/div').text != "No upcoming appointments available":
+        print("ZocDoc Ran")
         driver.quit()
         return True
     # driver.quit()
+    print("ZocDoc Ran")
     return False
 
 def cvsCheck():
@@ -61,8 +65,10 @@ def cvsCheck():
     time.sleep(2)
     driver.find_element_by_xpath('/html/body/content/div/div/div/div[3]/div/div/div[2]/div/div[5]/div/div/div/div/div/div[1]/div[2]/div/div[2]/div/div/div/div/div[1]/ul/li[11]/div/a/span').click()
     if driver.find_element_by_xpath('/html/body/div[2]/div/div[17]/div/div/div/div/div/div[1]/div[2]/div/div/div[2]/div/div[6]/div/div/table/tbody/tr[2]/td[2]/span').text != "Fully Booked":
+        print("CVS Ran")
         driver.quit()
         return True
+    print("CVS Ran")
     driver.quit()
     return False
 
@@ -94,10 +100,8 @@ def run():
     while True:
         if zocdocCheck() == True:
             vacdiscord.sendNotification("https://www.zocdoc.com/vaccine/search/IL?flavor=state-search")
-            print("ZocDoc Ran")
         if cvsCheck() == True:
             vacdiscord.sendNotification("https://www.cvs.com/immunizations/covid-19-vaccine?icid=cvs-home-hero1-link2-coronavirus-vaccine")
-            print("CVS Ran")
         time.sleep(120)
 
 run()
