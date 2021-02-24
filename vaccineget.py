@@ -37,6 +37,7 @@ def zocdocCheck(driver):
     driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[6]/div[3]/div[2]/div[2]/label/span[1]/input').click()
     driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[6]/div[4]/div[2]/div[2]/label/span[1]/input').click()
     driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[6]/button').click()
+    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[8]/div/div/div/label/input').click()
     driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[8]/button').click()
 
     # Cycling through all providers in ZocDoc
@@ -63,28 +64,31 @@ def cvsCheck(driver):
     print("CVS Ran")
     return False
 
-def walmartCheck():
+def walmartCheck(driver):
+    driver.get('https://www.walmart.com/pharmacy/clinical-services/immunization/scheduled?imzType=covid')
+    driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[3]/section/div[2]/div/div[1]/div/div[2]/div/div/form/div[1]/input').send_keys('Chicago')
+
     return None
 
-def samsclubCheck():
+def samsclubCheck(driver):
     return None
 
-def walgreensCheck():
+def walgreensCheck(driver):
     return None
 
-def uicCheck():
+def uicCheck(driver):
     return None
 
-def costcooneCheck():
+def costcooneCheck(driver):
     return None
 
-def costcotwoCheck():
+def costcotwoCheck(driver):
     return None
 
-def jeweloscoCheck():
+def jeweloscoCheck(driver):
     return None
 
-def marianosCheck():
+def marianosCheck(driver):
     return None
 
 def run():
