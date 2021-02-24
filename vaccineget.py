@@ -21,11 +21,8 @@ import vacdiscord
 #Check for vaccines, send message through discord
 
 vacdiscord = vacdiscord.VaccineNotification()
-driver = webdriver.FirefoxProfile()
-driver.set_preference('dom.webdriver.enabled',False)
-driver = webdriver.Firefox(executable_path=config.geckopath,firefox_profile=driver)
 
-def zocdocCheck():
+def zocdocCheck(driver):
     driver.get("https://www.zocdoc.com/vaccine")
     Select(driver.find_element_by_xpath('//*[@id="main"]/div/div[1]/section/div/div/div/div/div/div/select')).select_by_visible_text('Illinois')
     driver.find_element_by_xpath('//*[@id="main"]/div/div[1]/section/div/div/div/div/button').click()
@@ -46,30 +43,24 @@ def zocdocCheck():
     for articleNumber in range(1,18):
         path = '//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[' + str(articleNumber) + ']/div/div[2]/div/div'
         if driver.find_element_by_xpath(path).text != "No upcoming appointments available":
-            print("ZocDoc Ran")
-            driver.quit()
+            print("ZocDoc Ran")         
             return True
-
     driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/nav/span[2]/a').click()
     time.sleep(2)
     if driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article/div/div[2]/div/div').text != "No upcoming appointments available":
-        print("ZocDoc Ran")
-        driver.quit()
+        print("ZocDoc Ran")  
         return True
-    # driver.quit()
     print("ZocDoc Ran")
     return False
 
-def cvsCheck():
+def cvsCheck(driver):
     driver.get("https://www.cvs.com/immunizations/covid-19-vaccine?icid=cvs-home-hero1-link2-coronavirus-vaccine")
     time.sleep(2)
     driver.find_element_by_xpath('/html/body/content/div/div/div/div[3]/div/div/div[2]/div/div[5]/div/div/div/div/div/div[1]/div[2]/div/div[2]/div/div/div/div/div[1]/ul/li[11]/div/a/span').click()
     if driver.find_element_by_xpath('/html/body/div[2]/div/div[17]/div/div/div/div/div/div[1]/div[2]/div/div/div[2]/div/div[6]/div/div/table/tbody/tr[2]/td[2]/span').text != "Fully Booked":
         print("CVS Ran")
-        driver.quit()
         return True
     print("CVS Ran")
-    driver.quit()
     return False
 
 def walmartCheck():
@@ -98,10 +89,14 @@ def marianosCheck():
 
 def run():
     while True:
-        if zocdocCheck() == True:
+        driver = webdriver.FirefoxProfile()
+        driver.set_preference('dom.webdriver.enabled',False)
+        driver = webdriver.Firefox(executable_path=config.geckopath,firefox_profile=driver)
+        if zocdocCheck(driver) == True:
             vacdiscord.sendNotification("https://www.zocdoc.com/vaccine/search/IL?flavor=state-search")
-        if cvsCheck() == True:
+        if cvsCheck(driver) == True:
             vacdiscord.sendNotification("https://www.cvs.com/immunizations/covid-19-vaccine?icid=cvs-home-hero1-link2-coronavirus-vaccine")
+        driver.quit()
         time.sleep(120)
 
 run()
