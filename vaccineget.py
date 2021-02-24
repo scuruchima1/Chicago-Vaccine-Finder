@@ -20,11 +20,11 @@ import vacdiscord
 #Check for vaccines, send message through discord
 
 vacdiscord = vacdiscord.VaccineNotification()
+driver = webdriver.FirefoxProfile()
+driver.set_preference('dom.webdriver.enabled',False)
+driver = webdriver.Firefox(executable_path='/usr/local/bin/geckodriver',firefox_profile=driver)
 
 def zocdocCheck():
-    driver = webdriver.FirefoxProfile()
-    driver.set_preference('dom.webdriver.enabled',False)
-    driver = webdriver.Firefox(executable_path='/usr/local/bin/geckodriver',firefox_profile=driver)
     driver.get("https://www.zocdoc.com/vaccine/search/IL?flavor=state-search")
     Select(driver.find_element_by_xpath('//*[@id="main"]/div/div[1]/section/div/div/div/div/div/div/select')).select_by_visible_text('Illinois')
     driver.find_element_by_xpath('//*[@id="main"]/div/div[1]/section/div/div/div/div/button').click()
@@ -41,66 +41,13 @@ def zocdocCheck():
     driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[6]/button').click()
     driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[8]/button').click()
 
-    # if driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[1]/div/div[2]/div/div').text != "No upcoming appointments available":
-    #     driver.quit()
-    #     return True
-    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[2]/div/div[2]/div/div').text != "No upcoming appointments available":
-    #     driver.quit()
-    #     return True
-    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[3]/div/div[2]/div/div').text != "No upcoming appointments available":
-    #     driver.quit()
-    #     return True
-    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[4]/div/div[2]/div/div').text != "No upcoming appointments available":
-    #     driver.quit()
-    #     return True
-    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[5]/div/div[2]/div/div').text != "No upcoming appointments available":
-    #     driver.quit()
-    #     return True
-    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[6]/div/div[2]/div/div').text != "No upcoming appointments available":
-    #     driver.quit()
-    #     return True
-    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[7]/div/div[2]/div/div').text != "No upcoming appointments available":
-    #     driver.quit()
-    #     return True
-    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[8]/div/div[2]/div/div').text != "No upcoming appointments available":
-    #     driver.quit()
-    #     return True
-    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[9]/div/div[2]/div/div').text != "No upcoming appointments available":
-    #     driver.quit()
-    #     return True
-    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[10]/div/div[2]/div/div').text != "No upcoming appointments available":
-    #     driver.quit()
-    #     return True
-    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[11]/div/div[2]/div/div').text != "No upcoming appointments available":
-    #     driver.quit()
-    #     return True
-    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[12]/div/div[2]/div/div').text != "No upcoming appointments available":
-    #     driver.quit()
-    #     return True
-    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[13]/div/div[2]/div/div').text != "No upcoming appointments available":
-    #     driver.quit()
-    #     return True
-    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[14]/div/div[2]/div/div').text != "No upcoming appointments available":
-    #     driver.quit()
-    #     return True
-    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[15]/div/div[2]/div/div').text != "No upcoming appointments available":
-    #     driver.quit()
-    #     return True
-    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[16]/div/div[2]/div/div').text != "No upcoming appointments available":
-    #     driver.quit()
-    #     return True
-    # elif driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[17]/div/div[2]/div/div').text != "No upcoming appointments available":
-    #     driver.quit()
-    #     return True
-
-        # making for loop
+    # making for loop
     for articleNumber in range(1,18):
         path = '//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[' + str(articleNumber) + ']/div/div[2]/div/div'
         if driver.find_element_by_xpath(path).text != "No upcoming appointments available":
             driver.quit()
             return True
 
-    time.sleep(3)
     driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/nav/span[2]/a').click()
     time.sleep(2)
     if driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article/div/div[2]/div/div').text != "No upcoming appointments available":
@@ -140,7 +87,8 @@ def run():
     while True:
         if zocdocCheck() == True:
             vacdiscord.sendNotification("https://www.zocdoc.com/vaccine/search/IL?flavor=state-search")
-            print("Ran")
+        else:
+            print('Ran')
         time.sleep(120)
 
 run()
