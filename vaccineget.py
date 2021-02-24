@@ -130,6 +130,7 @@ def run():
     while True:
         if zocdocCheck() == True:
             vacdiscord.sendNotification("https://www.zocdoc.com/vaccine/search/IL?flavor=state-search")
+            print("Ran")
         time.sleep(120)
 
 run()
