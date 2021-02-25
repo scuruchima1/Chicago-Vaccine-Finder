@@ -146,7 +146,10 @@ def marianosCheck(driver):
     Select(driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[11]/div/div[2]/div[2]/div/div/div/select')).select_by_visible_text('Manufacturing')
     driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[12]/div/div[2]/div[2]/div/div/div/button').click()
     driver.find_element_by_xpath('/html/body/div[1]/div/div[3]/div[1]/main/div/section[2]/div/div/div[2]/div/div[1]/div/div/div/div[1]/form/div/div[1]/div').click()
-    driver.find_element_by_xpath('/html/body/div[1]/div/div[3]/div[1]/main/div/section[2]/div/div/div[2]/div/div[1]/div/div/div/div[1]/form/div/div[1]/div').send_keys('Chicago')
+    actions = ActionChains(driver)
+    actions.send_keys('Chicago')
+    actions.perform()
+    driver.find_element_by_xpath('//*[@id="step1"]/div/div/div/div[1]/form/button').click()
     if driver.find_element_by_xpath('//*[@id="step1"]/div/div/div/div[2]/div/span').text != 'None of the locations in your search currently offer COVID-19 vaccines, please try another Zip Code, City, or State':
         print("Marianos Ran")
         return True
@@ -174,8 +177,7 @@ async def on_ready():
         if uicCheck(driver) == True:
             await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://mychart-openscheduling.et1085.epichosted.com/MyChart/SignupAndSchedule/EmbeddedSchedule?id=30301&dept=10127001&vt=1055")
         if marianosCheck(driver) == True:
-            #  await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://mychart-openscheduling.et1085.epichosted.com/MyChart/SignupAndSchedule/EmbeddedSchedule?id=30301&dept=10127001&vt=1055")
-            print("test")
+            await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.marianos.com/rx/covid-eligibility")
         driver.quit()
         time.sleep(80)
     #Main ends here
