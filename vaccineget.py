@@ -104,18 +104,20 @@ def uicCheck(driver):
 
 def costcooneCheck(driver):
     driver.get('https://book-costcopharmacy.appointment-plus.com/cttc019c/?e_id=5439#/')
-    driver.find_element_by_xpath('//*[@id="book-button-header"]/a').click()
+    driver.find_element_by_xpath('//*[@id="page-content"]/div/div[2]/div[3]/ul/li/a').click()
+    time.sleep(1)
     if driver.find_element_by_xpath('//*[@id="SelectEmployeeView"]/div[1]/div/div[2]/p').text != "We're sorry, but no clinics are available for the you selected. Please choose another clinic.":
         print('Costco 1 Ran')
         return True
     print('Costco 1 Ran')
     return False
 
-#Steven is working on
 def costcotwoCheck(driver):
-    driver.get('https://book-costcopharmacy.appointment-plus.com/cttb5n42/?e_id=5435#/')
-    driver.find_element_by_xpath('//*[@id="book-button-header"]/a').click()
-    print(driver.find_element_by_xpath('//*[@id="page-content"]/div/div[2]/div/div[3]/div/span[1]').text)
+    driver.get('https://book-costcopharmacy.appointment-plus.com/cttb5n42/?e_id=5435#/book-appointment/select-date-and-time?_qk=feid9i3ede')
+    if driver.find_element_by_xpath('//*[@id="page-content"]/div/div[2]/div/div[3]/div/span[1]').text != "We’re sorry, but there are not available times.  Please select either a new":
+        print('Costco 2 Ran')
+        return True
+    print('Costco 2 Ran')
     return False
 
 def jeweloscoCheck(driver):
@@ -140,6 +142,8 @@ def run():
             vacdiscord.sendNotification('https://www.walgreens.com/findcare/vaccination/covid-19/location-screening')
         if costcooneCheck(driver) == True:
             vacdiscord.sendNotification('https://book-costcopharmacy.appointment-plus.com/cttc019c/?e_id=5439#/')
+        if costcotwoCheck(driver) == True:
+            vacdiscord.sendNotification('https://book-costcopharmacy.appointment-plus.com/cttb5n42/?e_id=5435#/')
         driver.quit()
         time.sleep(80)
 
