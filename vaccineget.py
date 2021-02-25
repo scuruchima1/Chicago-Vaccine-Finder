@@ -93,11 +93,13 @@ def walgreensCheck(driver):
     driver.find_element_by_xpath('//*[@id="inputLocation"]').clear()
     driver.find_element_by_xpath('//*[@id="inputLocation"]').send_keys('Chicago')
     driver.find_element_by_xpath('//*[@id="wag-body-main-container"]/section/section/section/section/section[2]/div/span/button').click()
-    if driver.find_element_by_xpath('//*[@id="wag-body-main-container"]/section/section/section/section/section[1]/p').text != "COVID-19 vaccination appointments are not available within 25 miles of Chicago for next 3 days":
+    #//*[@id="wag-body-main-container"]/section/section/section/section/section[2]/p for vaccine available
+    if driver.find_element_by_xpath('//*[@id="wag-body-main-container"]/section/section/section/section/section[1]/p'):
+        print('Walgreens Ran')
+        return False
+    elif driver.find_elements_by_xpath('//*[@id="wag-body-main-container"]/section/section/section/section/section[2]/p'):
         print('Walgreens Ran')
         return True
-    print('Walgreens Ran')
-    return False
 
 def uicCheck(driver):
     return None
@@ -138,8 +140,10 @@ def run():
             vacdiscord.sendNotification("https://www.cvs.com/immunizations/covid-19-vaccine?icid=cvs-home-hero1-link2-coronavirus-vaccine")
         if walmartCheck(driver) == True:
             vacdiscord.sendNotification("https://www.walmart.com/pharmacy/clinical-services/immunization/scheduled?imzType=covid")
+        driver.implicitly_wait(2)
         if walgreensCheck(driver) == True:
             vacdiscord.sendNotification('https://www.walgreens.com/findcare/vaccination/covid-19/location-screening')
+        driver.implicitly_wait(15)
         if costcooneCheck(driver) == True:
             vacdiscord.sendNotification('https://book-costcopharmacy.appointment-plus.com/cttc019c/?e_id=5439#/')
         if costcotwoCheck(driver) == True:
