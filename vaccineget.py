@@ -49,9 +49,12 @@ def zocdocCheck(driver):
             print("ZocDoc Ran")         
             return True
     driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/nav/span[2]/a').click()
-    if driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article/div/div[2]/div/div').text != "No upcoming appointments available":
-        print("ZocDoc Ran")  
-        return True
+
+    for articleNumber in range(1,3):
+        path = '//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[' + str(articleNumber) + ']/div/div[2]/div/div'
+        if driver.find_element_by_xpath(path).text != "No upcoming appointments available":
+            print("ZocDoc Ran")         
+            return True
     print("ZocDoc Ran")
     return False
 
