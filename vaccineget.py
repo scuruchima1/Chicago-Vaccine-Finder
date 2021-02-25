@@ -155,6 +155,22 @@ def marianosCheck(driver):
         return True
     print("Marianos Ran")
     return False
+    
+# Crystal Lake Vaccination Checks
+
+def walgreensCheck_CrystalLake(driver):
+    driver.get('https://www.walgreens.com/findcare/vaccination/covid-19/location-screening')
+    driver.find_element_by_xpath('//*[@id="inputLocation"]').clear()
+    driver.find_element_by_xpath('//*[@id="inputLocation"]').send_keys('Crystal Lake')
+    driver.find_element_by_xpath('//*[@id="wag-body-main-container"]/section/section/section/section/section[2]/div/span/button').click()
+    #//*[@id="wag-body-main-container"]/section/section/section/section/section[2]/p for vaccine available
+    try:
+        driver.find_element_by_xpath('//*[@id="wag-body-main-container"]/section/section/section/section/section[1]/p')
+    except NoSuchElementException:
+        print('Walgreens Ran')
+        return True
+    print('Walgreens Ran')
+    return False
 
 @client.event
 async def on_ready():
@@ -178,6 +194,10 @@ async def on_ready():
             await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://mychart-openscheduling.et1085.epichosted.com/MyChart/SignupAndSchedule/EmbeddedSchedule?id=30301&dept=10127001&vt=1055")
         if marianosCheck(driver) == True:
             await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.marianos.com/rx/covid-eligibility")
+        driver.implicitly_wait(4)
+        if walgreensCheck_CrystalLake(driver) == True:
+            await client.guilds[0].channels[6].send(f"**Vaccine Found!**\nhttps://www.walgreens.com/findcare/vaccination/covid-19/location-screening")
+        driver.implicitly_wait(15)
         driver.quit()
         time.sleep(80)
     #Main ends here
