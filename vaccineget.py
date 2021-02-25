@@ -145,12 +145,12 @@ def marianosCheck(driver):
     driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[10]/div/div[2]/div[2]/div/div/div/div/form/div[2]/button').click()
     Select(driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[11]/div/div[2]/div[2]/div/div/div/select')).select_by_visible_text('Manufacturing')
     driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[12]/div/div[2]/div[2]/div/div/div/button').click()
-    driver.find_element_by_xpath('/html/body/div[1]/div/div[3]/div[1]/main/div/section[2]/div/div/div[2]/div/div[1]/div/div/div/div[1]/form/div/div[1]/div').click()
+    driver.find_element_by_xpath('//*[@id="step1"]/div/div/div/div[2]/form/div/div[1]/div').click()
     actions = ActionChains(driver)
     actions.send_keys('Chicago')
     actions.perform()
-    driver.find_element_by_xpath('//*[@id="step1"]/div/div/div/div[1]/form/button').click()
-    if driver.find_element_by_xpath('//*[@id="step1"]/div/div/div/div[2]/div/span').text != 'None of the locations in your search currently offer COVID-19 vaccines, please try another Zip Code, City, or State':
+    driver.find_element_by_xpath('//*[@id="step1"]/div/div/div/div[2]/form/button').click()
+    if driver.find_element_by_xpath('//*[@id="step1"]/div/div/div/div[3]/div/span').text != 'None of the locations in your search currently offer COVID-19 vaccines, please try another Zip Code, City, or State':
         print("Marianos Ran")
         return True
     print("Marianos Ran")
