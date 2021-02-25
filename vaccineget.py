@@ -4,6 +4,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.webdriver import FirefoxProfile
 from selenium.webdriver.common.action_chains import ActionChains 
+from selenium.common.exceptions import NoSuchElementException        
 import time
 import pprint
 import config 
@@ -94,12 +95,13 @@ def walgreensCheck(driver):
     driver.find_element_by_xpath('//*[@id="inputLocation"]').send_keys('Chicago')
     driver.find_element_by_xpath('//*[@id="wag-body-main-container"]/section/section/section/section/section[2]/div/span/button').click()
     #//*[@id="wag-body-main-container"]/section/section/section/section/section[2]/p for vaccine available
-    if driver.find_element_by_xpath('//*[@id="wag-body-main-container"]/section/section/section/section/section[1]/p'):
-        print('Walgreens Ran')
-        return False
-    elif driver.find_elements_by_xpath('//*[@id="wag-body-main-container"]/section/section/section/section/section[2]/p'):
+    try:
+        driver.find_element_by_xpath('//*[@id="wag-body-main-container"]/section/section/section/section/section[1]/p')
+    except NoSuchElementException:
         print('Walgreens Ran')
         return True
+    print('Walgreens Ran')
+    return False
 
 def uicCheck(driver):
     return None
@@ -144,10 +146,7 @@ def run():
         if walgreensCheck(driver) == True:
             vacdiscord.sendNotification('https://www.walgreens.com/findcare/vaccination/covid-19/location-screening')
         driver.implicitly_wait(15)
-        if costcooneCheck(driver) == True:
-            vacdiscord.sendNotification('https://book-costcopharmacy.appointment-plus.com/cttc019c/?e_id=5439#/')
-        if costcotwoCheck(driver) == True:
-            vacdiscord.sendNotification('https://book-costcopharmacy.appointment-plus.com/cttb5n42/?e_id=5435#/')
+
         driver.quit()
         time.sleep(80)
 
