@@ -2,6 +2,8 @@ import requests
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.firefox.webdriver import FirefoxProfile
+from selenium.webdriver.common.action_chains import ActionChains 
 import time
 import pprint
 import config 
@@ -47,7 +49,6 @@ def zocdocCheck(driver):
             print("ZocDoc Ran")         
             return True
     driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/nav/span[2]/a').click()
-    time.sleep(2)
     if driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article/div/div[2]/div/div').text != "No upcoming appointments available":
         print("ZocDoc Ran")  
         return True
@@ -56,7 +57,6 @@ def zocdocCheck(driver):
 
 def cvsCheck(driver):
     driver.get("https://www.cvs.com/immunizations/covid-19-vaccine?icid=cvs-home-hero1-link2-coronavirus-vaccine")
-    time.sleep(2)
     driver.find_element_by_xpath('/html/body/content/div/div/div/div[3]/div/div/div[2]/div/div[5]/div/div/div/div/div/div[1]/div[2]/div/div[2]/div/div/div/div/div[1]/ul/li[11]/div/a/span').click()
     if driver.find_element_by_xpath('/html/body/div[2]/div/div[17]/div/div/div/div/div/div[1]/div[2]/div/div/div[2]/div/div[6]/div/div/table/tbody/tr[2]/td[2]/span').text != "Fully Booked":
         print("CVS Ran")
@@ -64,13 +64,27 @@ def cvsCheck(driver):
     print("CVS Ran")
     return False
 
+#Needs Firefox profile to have walmart sign in
 def walmartCheck(driver):
     driver.get('https://www.walmart.com/pharmacy/clinical-services/immunization/scheduled?imzType=covid')
-    driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[3]/section/div[2]/div/div[1]/div/div[2]/div/div/form/div[1]/input').send_keys('Chicago')
-
-    return None
+    if driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[3]/section/div[2]/div/div[2]/h1').text != 'Not available in this area - yet':
+        print('Walmart Ran')
+        return True
+    print('Walmart Ran')
+    return False
 
 def samsclubCheck(driver):
+    driver.get('https://www.samsclub.com/pharmacy/immunization/form?imzType=covid')
+    #Can't click on box, fix later
+    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[1]/div[2]/div/div/div/div/form/div[1]/div[1]/div/label').click()
+    driver.find_element_by_xpath('//*[@id="inputbox8"]').send_keys('Chicago')
+    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[1]/div[2]/div/div/div/div/form/div[2]/button').click()
+    driver.find_element_by_xpath('/html/body/div[1]/div[2]/div[2]/div[2]/div/div/div[1]/div[2]/div/div/div[2]/button').click()
+    action = ActionChains(driver)
+    action.click_and_hold(on_element=driver.find_element_by_xpath('/html/body'))
+    action.perform()
+    time.sleep(5)
+    action.release()
     return None
 
 def walgreensCheck(driver):
@@ -93,13 +107,16 @@ def marianosCheck(driver):
 
 def run():
     while True:
-        driver = webdriver.FirefoxProfile()
+        driver = webdriver.FirefoxProfile(config.firefoxprofpath)
         driver.set_preference('dom.webdriver.enabled',False)
         driver = webdriver.Firefox(executable_path=config.geckopath,firefox_profile=driver)
+        driver.implicitly_wait(15)
         if zocdocCheck(driver) == True:
             vacdiscord.sendNotification("https://www.zocdoc.com/vaccine/search/IL?flavor=state-search")
         if cvsCheck(driver) == True:
             vacdiscord.sendNotification("https://www.cvs.com/immunizations/covid-19-vaccine?icid=cvs-home-hero1-link2-coronavirus-vaccine")
+        if walmartCheck(driver) == True:
+            vacdiscord.sendNotification("https://www.walmart.com/pharmacy/clinical-services/immunization/scheduled?imzType=covid")
         driver.quit()
         time.sleep(120)
 
