@@ -118,6 +118,6 @@ def run():
         if walmartCheck(driver) == True:
             vacdiscord.sendNotification("https://www.walmart.com/pharmacy/clinical-services/immunization/scheduled?imzType=covid")
         driver.quit()
-        time.sleep(120)
+        time.sleep(80)
 
 run()
