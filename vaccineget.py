@@ -73,11 +73,12 @@ def walmartCheck(driver):
     print('Walmart Ran')
     return False
 
+#Can't click on box, fix later, lower priority
 def samsclubCheck(driver):
     driver.get('https://www.samsclub.com/pharmacy/immunization/form?imzType=covid')
-    #Can't click on box, fix later
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[1]/div[2]/div/div/div/div/form/div[1]/div[1]/div/label').click()
-    driver.find_element_by_xpath('//*[@id="inputbox8"]').send_keys('Chicago')
+    time.sleep(10)
+    driver.find_element_by_xpath('//*[@id="inputbox1"]').click()
+    driver.find_element_by_xpath('//*[@id="inputbox1"]').send_keys('Chicago')
     driver.find_element_by_xpath('//*[@id="main"]/div/div/div[1]/div[2]/div/div/div/div/form/div[2]/button').click()
     driver.find_element_by_xpath('/html/body/div[1]/div[2]/div[2]/div[2]/div/div/div[1]/div[2]/div/div/div[2]/button').click()
     action = ActionChains(driver)
@@ -88,16 +89,34 @@ def samsclubCheck(driver):
     return None
 
 def walgreensCheck(driver):
-    return None
+    driver.get('https://www.walgreens.com/findcare/vaccination/covid-19/location-screening')
+    driver.find_element_by_xpath('//*[@id="inputLocation"]').clear()
+    driver.find_element_by_xpath('//*[@id="inputLocation"]').send_keys('Chicago')
+    driver.find_element_by_xpath('//*[@id="wag-body-main-container"]/section/section/section/section/section[2]/div/span/button').click()
+    if driver.find_element_by_xpath('//*[@id="wag-body-main-container"]/section/section/section/section/section[1]/p').text != "COVID-19 vaccination appointments are not available within 25 miles of Chicago for next 3 days":
+        print('Walgreens Ran')
+        return True
+    print('Walgreens Ran')
+    return False
 
 def uicCheck(driver):
     return None
 
 def costcooneCheck(driver):
-    return None
+    driver.get('https://book-costcopharmacy.appointment-plus.com/cttc019c/?e_id=5439#/')
+    driver.find_element_by_xpath('//*[@id="book-button-header"]/a').click()
+    if driver.find_element_by_xpath('//*[@id="SelectEmployeeView"]/div[1]/div/div[2]/p').text != "We're sorry, but no clinics are available for the you selected. Please choose another clinic.":
+        print('Costco 1 Ran')
+        return True
+    print('Costco 1 Ran')
+    return False
 
+#Steven is working on
 def costcotwoCheck(driver):
-    return None
+    driver.get('https://book-costcopharmacy.appointment-plus.com/cttb5n42/?e_id=5435#/')
+    driver.find_element_by_xpath('//*[@id="book-button-header"]/a').click()
+    print(driver.find_element_by_xpath('//*[@id="page-content"]/div/div[2]/div/div[3]/div/span[1]').text)
+    return False
 
 def jeweloscoCheck(driver):
     return None
@@ -117,6 +136,10 @@ def run():
             vacdiscord.sendNotification("https://www.cvs.com/immunizations/covid-19-vaccine?icid=cvs-home-hero1-link2-coronavirus-vaccine")
         if walmartCheck(driver) == True:
             vacdiscord.sendNotification("https://www.walmart.com/pharmacy/clinical-services/immunization/scheduled?imzType=covid")
+        if walgreensCheck(driver) == True:
+            vacdiscord.sendNotification('https://www.walgreens.com/findcare/vaccination/covid-19/location-screening')
+        if costcooneCheck(driver) == True:
+            vacdiscord.sendNotification('https://book-costcopharmacy.appointment-plus.com/cttc019c/?e_id=5439#/')
         driver.quit()
         time.sleep(80)
 
