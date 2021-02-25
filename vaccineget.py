@@ -106,7 +106,12 @@ def walgreensCheck(driver):
     return False
 
 def uicCheck(driver):
-    return None
+    driver.get('https://mychart-openscheduling.et1085.epichosted.com/MyChart/SignupAndSchedule/EmbeddedSchedule?id=30301&dept=10127001&vt=1055')
+    if driver.find_element_by_xpath('//*[@id="D6F73C26-7627-4948-95EA-2C630C25C5E9_scheduleOpenings_OpeningsData"]/div/span/span[2]').text != "There are currently no vaccine appointments available. We are working hard to offer more vaccine appointments soon. Please check back daily.":
+        print('UIC Health Ran')
+        return True
+    print('UIC Health Ran')
+    return False
 
 def costcooneCheck(driver):
     driver.get('https://book-costcopharmacy.appointment-plus.com/cttc019c/?e_id=5439#/')
@@ -134,6 +139,7 @@ def marianosCheck(driver):
 
 @client.event
 async def on_ready():
+    #Main starts here
     while True:
         driver = webdriver.FirefoxProfile(config.firefoxprofpath)
         driver.set_preference('dom.webdriver.enabled',False)
@@ -149,8 +155,10 @@ async def on_ready():
         if walgreensCheck(driver) == True:
             await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.walgreens.com/findcare/vaccination/covid-19/location-screening")
         driver.implicitly_wait(15)
-
+        if uicCheck(driver) == True:
+            await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://mychart-openscheduling.et1085.epichosted.com/MyChart/SignupAndSchedule/EmbeddedSchedule?id=30301&dept=10127001&vt=1055")
         driver.quit()
         time.sleep(80)
+    #Main ends here
 
 client.run(config.discordbotapikey)
