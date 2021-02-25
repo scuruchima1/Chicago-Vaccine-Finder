@@ -8,7 +8,7 @@ from selenium.common.exceptions import NoSuchElementException
 import time
 import pprint
 import config 
-import vacdiscord
+import discord
 
 # zocdoc - https://www.zocdoc.com/vaccine/search/IL?flavor=state-search
 # cvs - https://www.cvs.com/immunizations/covid-19-vaccine
@@ -22,8 +22,7 @@ import vacdiscord
 # mariano's - https://www.marianos.com/rx/covid-eligibility
 
 #Check for vaccines, send message through discord
-
-vacdiscord = vacdiscord.VaccineNotification()
+client = discord.Client()
 
 def zocdocCheck(driver):
     driver.get("https://www.zocdoc.com/vaccine")
@@ -130,24 +129,25 @@ def jeweloscoCheck(driver):
 def marianosCheck(driver):
     return None
 
-def run():
+@client.event
+async def on_ready():
     while True:
         driver = webdriver.FirefoxProfile(config.firefoxprofpath)
         driver.set_preference('dom.webdriver.enabled',False)
         driver = webdriver.Firefox(executable_path=config.geckopath,firefox_profile=driver)
         driver.implicitly_wait(15)
         if zocdocCheck(driver) == True:
-            vacdiscord.sendNotification("https://www.zocdoc.com/vaccine/search/IL?flavor=state-search")
+            await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.zocdoc.com/vaccine/search/IL?flavor=state-search")
         if cvsCheck(driver) == True:
-            vacdiscord.sendNotification("https://www.cvs.com/immunizations/covid-19-vaccine?icid=cvs-home-hero1-link2-coronavirus-vaccine")
+            await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.cvs.com/immunizations/covid-19-vaccine?icid=cvs-home-hero1-link2-coronavirus-vaccine")
         if walmartCheck(driver) == True:
-            vacdiscord.sendNotification("https://www.walmart.com/pharmacy/clinical-services/immunization/scheduled?imzType=covid")
+            await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.walmart.com/pharmacy/clinical-services/immunization/scheduled?imzType=covid")
         driver.implicitly_wait(2)
         if walgreensCheck(driver) == True:
-            vacdiscord.sendNotification('https://www.walgreens.com/findcare/vaccination/covid-19/location-screening')
+            await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.walgreens.com/findcare/vaccination/covid-19/location-screening")
         driver.implicitly_wait(15)
 
         driver.quit()
         time.sleep(80)
 
-run()
+client.run(config.discordbotapikey)
