@@ -142,7 +142,7 @@ async def on_ready():
             await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.cvs.com/immunizations/covid-19-vaccine?icid=cvs-home-hero1-link2-coronavirus-vaccine")
         if walmartCheck(driver) == True:
             await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.walmart.com/pharmacy/clinical-services/immunization/scheduled?imzType=covid")
-        driver.implicitly_wait(2)
+        driver.implicitly_wait(4)
         if walgreensCheck(driver) == True:
             await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.walgreens.com/findcare/vaccination/covid-19/location-screening")
         driver.implicitly_wait(15)
