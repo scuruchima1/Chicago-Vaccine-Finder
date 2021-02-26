@@ -167,9 +167,9 @@ def walgreensCheck_CrystalLake(driver):
     try:
         driver.find_element_by_xpath('//*[@id="wag-body-main-container"]/section/section/section/section/section[1]/p')
     except NoSuchElementException:
-        print('Walgreens Ran')
+        print('Walgreens Crystal Lake Ran')
         return True
-    print('Walgreens Ran')
+    print('Walgreens Crystal Lake Ran')
     return False
 
 @client.event
