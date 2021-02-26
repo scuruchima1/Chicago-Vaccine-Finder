@@ -71,6 +71,12 @@ def cvsCheck(driver):
 #Needs Firefox profile to have walmart sign in
 def walmartCheck(driver):
     driver.get('https://www.walmart.com/pharmacy/clinical-services/immunization/scheduled?imzType=covid')
+    driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[3]/section/div[2]/div/div[1]/div/div[2]/div/div/form/div[1]/input').clear()
+    driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[3]/section/div[2]/div/div[1]/div/div[2]/div/div/form/div[1]/input').send_keys('Chicago')
+    driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[3]/section/div[2]/div/div[1]/div/div[2]/div/div/form/div[1]/input').click()
+    actions = ActionChains(driver)
+    actions.send_keys(Keys.ENTER)
+    actions.perform()
     if driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[3]/section/div[2]/div/div[2]/h1').text != 'Not available in this area - yet':
         print('Walmart Ran')
         return True
@@ -246,11 +252,11 @@ def marianosCheck_CrystalLake(driver):
 @client.event
 async def on_ready():
     #Main starts here
-    driver = webdriver.FirefoxProfile(config.firefoxprofpath)
-    driver.set_preference('dom.webdriver.enabled',False)
-    driver = webdriver.Firefox(executable_path=config.geckopath,firefox_profile=driver)
-    driver.implicitly_wait(15)
     while True:
+        driver = webdriver.FirefoxProfile(config.firefoxprofpath)
+        driver.set_preference('dom.webdriver.enabled',False)
+        driver = webdriver.Firefox(executable_path=config.geckopath,firefox_profile=driver)
+        driver.implicitly_wait(15)
         try:
             if zocdocCheck(driver) == True:
                 await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.zocdoc.com/vaccine/search/IL?flavor=state-search")
@@ -266,7 +272,6 @@ async def on_ready():
                 await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.walmart.com/pharmacy/clinical-services/immunization/scheduled?imzType=covid")
         except:
             print('Walmart Error')
-        driver.implicitly_wait(4)
         try:
             if walgreensCheck(driver) == True:
                 await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.walgreens.com/findcare/vaccination/covid-19/location-screening")
@@ -305,7 +310,7 @@ async def on_ready():
                 await client.guilds[0].channels[6].send(f"**Vaccine Found!**\nhttps://www.marianos.com/rx/covid-eligibility")
         except Exception:
             print('Marianos Crystal Lake Error')
-        # driver.quit()
+        driver.quit()
         time.sleep(10)
     #Main ends here
 
