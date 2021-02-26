@@ -4,7 +4,8 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.webdriver import FirefoxProfile
 from selenium.webdriver.common.action_chains import ActionChains 
-from selenium.common.exceptions import NoSuchElementException        
+from selenium.common.exceptions import NoSuchElementException     
+from selenium.webdriver.common.keys import Keys
 import time
 import pprint
 import config 
@@ -116,7 +117,6 @@ def uicCheck(driver):
 def costcooneCheck(driver):
     driver.get('https://book-costcopharmacy.appointment-plus.com/cttc019c/?e_id=5439#/')
     driver.find_element_by_xpath('//*[@id="page-content"]/div/div[2]/div[3]/ul/li/a').click()
-    time.sleep(1)
     if driver.find_element_by_xpath('//*[@id="SelectEmployeeView"]/div[1]/div/div[2]/p').text != "We're sorry, but no clinics are available for the you selected. Please choose another clinic.":
         print('Costco 1 Ran')
         return True
@@ -124,15 +124,64 @@ def costcooneCheck(driver):
     return False
 
 def costcotwoCheck(driver):
-    driver.get('https://book-costcopharmacy.appointment-plus.com/cttb5n42/?e_id=5435#/book-appointment/select-date-and-time?_qk=feid9i3ede')
-    if driver.find_element_by_xpath('//*[@id="page-content"]/div/div[2]/div/div[3]/div/span[1]').text != "We’re sorry, but there are not available times.  Please select either a new":
+    driver.get('https://book-costcopharmacy.appointment-plus.com/cttb5n42/?e_id=5435#/')
+    driver.find_element_by_xpath('//*[@id="page-content"]/div/div[2]/div[3]/ul/li/a').click()
+    if driver.find_element_by_xpath('//*[@id="SelectEmployeeView"]/div[1]/div/div[2]/p').text != "We're sorry, but no clinics are available for the you selected. Please choose another clinic.":
         print('Costco 2 Ran')
         return True
     print('Costco 2 Ran')
     return False
 
 def jeweloscoCheck(driver):
-    return None
+    driver.get('https://www.mhealthappointments.com/covidappt')
+    time.sleep(1)
+    driver.find_element_by_xpath('//*[@id="covid_vaccine_search_input"]').click()
+    actions= ActionChains(driver)
+    actions.send_keys("60607")
+    actions.perform()
+    driver.find_element_by_xpath('//*[@id="fifteenMile-covid_vaccine_search"]').click()
+    driver.find_element_by_xpath('//*[@id="covid_vaccine_search"]/div[2]/div[2]/button').click()   
+    driver.find_element_by_xpath('//*[@id="attestation_1002"]').click()
+    actions.send_keys(Keys.TAB + Keys.TAB + Keys.TAB + Keys.TAB + Keys.TAB + Keys.TAB + Keys.TAB + " ")
+    actions.perform()
+    time.sleep(2)
+    driver.find_element_by_xpath('//*[@id="covid_vaccine_search_questions_submit"]/div/button').click()
+    Select(driver.find_element_by_xpath('//*[@id="appointmentType-type"]')).select_by_visible_text('COVID Vaccine Dose 1 Appt')
+    time.sleep(1)
+    driver.find_element_by_xpath('//*[@id="covid19-reg-v2"]/div/div[1]/div/div[2]/div/div[4]/div[2]/div[1]/div/button').click()
+    time.sleep(2)
+    driver.find_element_by_xpath('//*[@id="covid19-reg-v2"]/div/div[2]/div/div[2]/div/div[4]/div[2]/div[1]/div/button').click()
+    checkstring = 'There is no availability at this time. Please try a different search or check back later as more availability may open.'
+    time.sleep(2)
+    if driver.find_element_by_xpath('//*[@id="covid19-reg-v2"]/div/div[3]/div/div[2]/div/div[3]/div/div/form/div[2]/div[4]/div/p').text != checkstring:
+        print('Jewel-Osco Ran')
+        return True
+    Select(driver.find_element_by_xpath('//*[@id="item-type"]')).select_by_index(1)
+    time.sleep(0.8)
+    if driver.find_element_by_xpath('//*[@id="covid19-reg-v2"]/div/div[3]/div/div[2]/div/div[3]/div/div/form/div[2]/div[4]/div/p').text != checkstring:
+        print('Jewel-Osco Ran')
+        return True
+    Select(driver.find_element_by_xpath('//*[@id="item-type"]')).select_by_index(2)
+    time.sleep(0.8)
+    if driver.find_element_by_xpath('//*[@id="covid19-reg-v2"]/div/div[3]/div/div[2]/div/div[3]/div/div/form/div[2]/div[4]/div/p').text != checkstring:
+        print('Jewel-Osco Ran')
+        return True
+    Select(driver.find_element_by_xpath('//*[@id="item-type"]')).select_by_index(3)
+    time.sleep(0.8)
+    if driver.find_element_by_xpath('//*[@id="covid19-reg-v2"]/div/div[3]/div/div[2]/div/div[3]/div/div/form/div[2]/div[4]/div/p').text != checkstring:
+        print('Jewel-Osco Ran')
+        return True
+    Select(driver.find_element_by_xpath('//*[@id="item-type"]')).select_by_index(4)
+    time.sleep(0.8)
+    if driver.find_element_by_xpath('//*[@id="covid19-reg-v2"]/div/div[3]/div/div[2]/div/div[3]/div/div/form/div[2]/div[4]/div/p').text != checkstring:
+        print('Jewel-Osco Ran')
+        return True
+    Select(driver.find_element_by_xpath('//*[@id="item-type"]')).select_by_index(5)
+    time.sleep(0.8)
+    if driver.find_element_by_xpath('//*[@id="covid19-reg-v2"]/div/div[3]/div/div[2]/div/div[3]/div/div/form/div[2]/div[4]/div/p').text != checkstring:
+        print('Jewel-Osco Ran')
+        return True
+    return False
 
 def marianosCheck(driver):
     driver.get('https://www.marianos.com/rx/covid-eligibility')
@@ -233,18 +282,33 @@ async def on_ready():
             if marianosCheck(driver) == True:
                 await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.marianos.com/rx/covid-eligibility")
         except Exception:
-            print("Mariano's Error")    
+            print("Mariano's Error") 
+        try:
+            if costcooneCheck(driver) == True:
+                await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://book-costcopharmacy.appointment-plus.com/cttc019c/?e_id=5439#/") 
+        except Exception:
+            print('Costco One Error')
+        try:
+            if costcotwoCheck(driver) == True:
+                await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://book-costcopharmacy.appointment-plus.com/cttb5n42/?e_id=5435#/") 
+        except Exception:
+            print('Costco Two Error')
+        try:
+            if jeweloscoCheck(driver) == True:
+                await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.mhealthappointments.com/covidappt")
+        except Exception:
+            print('Jewel-Osco Error')
         driver.implicitly_wait(4)
         try:
             if walgreensCheck_CrystalLake(driver) == True:
                 await client.guilds[0].channels[6].send(f"**Vaccine Found!**\nhttps://www.walgreens.com/findcare/vaccination/covid-19/location-screening")
-        except:
+        except Exception:
             print('Walgreens Crystal Lake Error')
         driver.implicitly_wait(15)
         try:
             if marianosCheck_CrystalLake(driver) == True:
                 await client.guilds[0].channels[6].send(f"**Vaccine Found!**\nhttps://www.marianos.com/rx/covid-eligibility")
-        except:
+        except Exception:
             print('Marianos Crystal Lake Error')
         driver.quit()
         time.sleep(80)
