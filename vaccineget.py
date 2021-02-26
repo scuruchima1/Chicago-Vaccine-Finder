@@ -172,6 +172,28 @@ def walgreensCheck_CrystalLake(driver):
     print('Walgreens Crystal Lake Ran')
     return False
 
+def marianosCheck_CrystalLake(driver):
+    driver.get('https://www.marianos.com/rx/covid-eligibility')
+    driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li/div/div[2]/div[2]/div/div/div/button[1]').click()
+    driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[3]/div/div[2]/div[2]/div/div/div/button[2]').click()
+    Select(driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[5]/div/div[2]/div[2]/div/div/div/select')).select_by_visible_text('IL')
+    driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[6]/div/div[2]/div[2]/div/div/div/button[2]').click()
+    driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[8]/div/div[2]/div[2]/div/div/div/button[2]').click()
+    driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[10]/div/div[2]/div[2]/div/div/div/div/form/div[1]/input').send_keys('01011970')
+    driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[10]/div/div[2]/div[2]/div/div/div/div/form/div[2]/button').click()
+    Select(driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[11]/div/div[2]/div[2]/div/div/div/select')).select_by_visible_text('Manufacturing')
+    driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[12]/div/div[2]/div[2]/div/div/div/button').click()
+    driver.find_element_by_xpath('//*[@id="step1"]/div/div/div/div[2]/form/div/div[1]/div').click()
+    actions = ActionChains(driver)
+    actions.send_keys('Crystal Lake')
+    actions.perform()
+    driver.find_element_by_xpath('//*[@id="step1"]/div/div/div/div[2]/form/button').click()
+    if driver.find_element_by_xpath('//*[@id="step1"]/div/div/div/div[3]/div/span').text != 'None of the locations in your search currently offer COVID-19 vaccines, please try another Zip Code, City, or State':
+        print("Marianos Crystal Lake Ran")
+        return True
+    print("Marianos Crystal Lake Ran")
+    return False
+
 @client.event
 async def on_ready():
     #Main starts here
@@ -219,6 +241,11 @@ async def on_ready():
         except:
             print('Walgreens Crystal Lake Error')
         driver.implicitly_wait(15)
+        try:
+            if marianosCheck_CrystalLake(driver) == True:
+                await client.guilds[0].channels[6].send(f"**Vaccine Found!**\nhttps://www.marianos.com/rx/covid-eligibility")
+        except:
+            print('Marianos Crystal Lake Error')
         driver.quit()
         time.sleep(80)
     #Main ends here
