@@ -246,11 +246,11 @@ def marianosCheck_CrystalLake(driver):
 @client.event
 async def on_ready():
     #Main starts here
+    driver = webdriver.FirefoxProfile(config.firefoxprofpath)
+    driver.set_preference('dom.webdriver.enabled',False)
+    driver = webdriver.Firefox(executable_path=config.geckopath,firefox_profile=driver)
+    driver.implicitly_wait(15)
     while True:
-        driver = webdriver.FirefoxProfile(config.firefoxprofpath)
-        driver.set_preference('dom.webdriver.enabled',False)
-        driver = webdriver.Firefox(executable_path=config.geckopath,firefox_profile=driver)
-        driver.implicitly_wait(15)
         try:
             if zocdocCheck(driver) == True:
                 await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.zocdoc.com/vaccine/search/IL?flavor=state-search")
@@ -305,8 +305,8 @@ async def on_ready():
                 await client.guilds[0].channels[6].send(f"**Vaccine Found!**\nhttps://www.marianos.com/rx/covid-eligibility")
         except Exception:
             print('Marianos Crystal Lake Error')
-        driver.quit()
-        time.sleep(65)
+        # driver.quit()
+        time.sleep(10)
     #Main ends here
 
 client.run(config.discordbotapikey)
