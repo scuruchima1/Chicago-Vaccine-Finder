@@ -180,23 +180,44 @@ async def on_ready():
         driver.set_preference('dom.webdriver.enabled',False)
         driver = webdriver.Firefox(executable_path=config.geckopath,firefox_profile=driver)
         driver.implicitly_wait(15)
-        if zocdocCheck(driver) == True:
-            await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.zocdoc.com/vaccine/search/IL?flavor=state-search")
-        if cvsCheck(driver) == True:
-            await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.cvs.com/immunizations/covid-19-vaccine?icid=cvs-home-hero1-link2-coronavirus-vaccine")
-        if walmartCheck(driver) == True:
-            await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.walmart.com/pharmacy/clinical-services/immunization/scheduled?imzType=covid")
+        try:
+            if zocdocCheck(driver) == True:
+                await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.zocdoc.com/vaccine/search/IL?flavor=state-search")
+        except Exception:
+            print('ZocDoc Error')
+        try:
+            if cvsCheck(driver) == True:
+                await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.cvs.com/immunizations/covid-19-vaccine?icid=cvs-home-hero1-link2-coronavirus-vaccine")
+        except Exception:
+            print('CVS Error')
+        try:
+            if walmartCheck(driver) == True:
+                await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.walmart.com/pharmacy/clinical-services/immunization/scheduled?imzType=covid")
+        except:
+            print('Walmart Error')
         driver.implicitly_wait(4)
-        if walgreensCheck(driver) == True:
-            await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.walgreens.com/findcare/vaccination/covid-19/location-screening")
+        try:
+            if walgreensCheck(driver) == True:
+                await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.walgreens.com/findcare/vaccination/covid-19/location-screening")
+        except:
+            print('Walgreens Error')
         driver.implicitly_wait(15)
-        if uicCheck(driver) == True:
-            await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://mychart-openscheduling.et1085.epichosted.com/MyChart/SignupAndSchedule/EmbeddedSchedule?id=30301&dept=10127001&vt=1055")
-        if marianosCheck(driver) == True:
-            await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.marianos.com/rx/covid-eligibility")
+        try:
+            if uicCheck(driver) == True:
+                await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://mychart-openscheduling.et1085.epichosted.com/MyChart/SignupAndSchedule/EmbeddedSchedule?id=30301&dept=10127001&vt=1055")
+        except:
+            print('UIC Error')
+        try:
+            if marianosCheck(driver) == True:
+                await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.marianos.com/rx/covid-eligibility")
+        except Exception:
+            print("Mariano's Error")    
         driver.implicitly_wait(4)
-        if walgreensCheck_CrystalLake(driver) == True:
-            await client.guilds[0].channels[6].send(f"**Vaccine Found!**\nhttps://www.walgreens.com/findcare/vaccination/covid-19/location-screening")
+        try:
+            if walgreensCheck_CrystalLake(driver) == True:
+                await client.guilds[0].channels[6].send(f"**Vaccine Found!**\nhttps://www.walgreens.com/findcare/vaccination/covid-19/location-screening")
+        except:
+            print('Walgreens Crystal Lake Error')
         driver.implicitly_wait(15)
         driver.quit()
         time.sleep(80)
