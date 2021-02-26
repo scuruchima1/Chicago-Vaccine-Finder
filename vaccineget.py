@@ -306,7 +306,7 @@ async def on_ready():
         except Exception:
             print('Marianos Crystal Lake Error')
         driver.quit()
-        time.sleep(80)
+        time.sleep(65)
     #Main ends here
 
 client.run(config.discordbotapikey)
