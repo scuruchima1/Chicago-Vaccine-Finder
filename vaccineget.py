@@ -35,24 +35,24 @@ def zocdocCheck(driver):
     driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[2]/div[2]/div[2]/div[1]/label/span[1]/input').click()
     driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[2]/div[3]/div[2]/div[1]/label/span[1]/input').click()
     driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[2]/button').click()
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[6]/div[1]/div[2]/div[2]/label/span[1]/input').click()
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[6]/div[2]/div[2]/div[2]/label/span[1]/input').click()
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[6]/div[3]/div[2]/div[2]/label/span[1]/input').click()
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[6]/div[4]/div[2]/div[2]/label/span[1]/input').click()
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[6]/button').click()
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[8]/div/div/div/label/input').click()
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[8]/button').click()
+    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[7]/div[1]/div[2]/div[2]/label/span[1]/input').click()
+    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[7]/div[2]/div[2]/div[2]/label/span[1]/input').click()
+    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[7]/div[3]/div[2]/div[2]/label/span[1]/input').click()
+    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[7]/div[4]/div[2]/div[2]/label/span[1]/input').click()
+    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[7]/button').click()
+    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[9]/div/div/div/label/input').click()
+    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[9]/button').click()
 
     # Cycling through all providers in ZocDoc
     for articleNumber in range(1,18):
-        path = '//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[' + str(articleNumber) + ']/div/div[2]/div/div'
+        path = f'//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[{str(articleNumber)}]/div/div[2]/div/div'
         if driver.find_element_by_xpath(path).text != "No upcoming appointments available":
             print("ZocDoc Ran")         
             return True
     driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/nav/span[2]/a').click()
 
     for articleNumber in range(1,3):
-        path = '//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[' + str(articleNumber) + ']/div/div[2]/div/div'
+        path = f'//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[{str(articleNumber)}]/div/div[2]/div/div'
         if driver.find_element_by_xpath(path).text != "No upcoming appointments available":
             print("ZocDoc Ran")         
             return True
@@ -293,11 +293,6 @@ async def on_ready():
                 await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://book-costcopharmacy.appointment-plus.com/cttb5n42/?e_id=5435#/") 
         except Exception:
             print('Costco Two Error')
-        try:
-            if jeweloscoCheck(driver) == True:
-                await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.mhealthappointments.com/covidappt")
-        except Exception:
-            print('Jewel-Osco Error')
         driver.implicitly_wait(4)
         try:
             if walgreensCheck_CrystalLake(driver) == True:
