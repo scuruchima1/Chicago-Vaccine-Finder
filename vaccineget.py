@@ -83,21 +83,6 @@ def walmartCheck(driver):
     print('Walmart Ran')
     return False
 
-#Can't click on box, fix later, lower priority
-def samsclubCheck(driver):
-    driver.get('https://www.samsclub.com/pharmacy/immunization/form?imzType=covid')
-    time.sleep(10)
-    driver.find_element_by_xpath('//*[@id="inputbox1"]').click()
-    driver.find_element_by_xpath('//*[@id="inputbox1"]').send_keys('Chicago')
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[1]/div[2]/div/div/div/div/form/div[2]/button').click()
-    driver.find_element_by_xpath('/html/body/div[1]/div[2]/div[2]/div[2]/div/div/div[1]/div[2]/div/div/div[2]/button').click()
-    action = ActionChains(driver)
-    action.click_and_hold(on_element=driver.find_element_by_xpath('/html/body'))
-    action.perform()
-    time.sleep(5)
-    action.release()
-    return None
-
 def walgreensCheck(driver):
     driver.get('https://www.walgreens.com/findcare/vaccination/covid-19/location-screening')
     driver.find_element_by_xpath('//*[@id="inputLocation"]').clear()
@@ -123,7 +108,9 @@ def uicCheck(driver):
 def costcooneCheck(driver):
     driver.get('https://book-costcopharmacy.appointment-plus.com/cttc019c/?e_id=5439#/')
     driver.find_element_by_xpath('//*[@id="page-content"]/div/div[2]/div[3]/ul/li/a').click()
-    if driver.find_element_by_xpath('//*[@id="SelectEmployeeView"]/div[1]/div/div[2]/p').text != "We're sorry, but no clinics are available for the you selected. Please choose another clinic.":
+    try:
+        driver.find_element_by_xpath('//*[@id="SelectEmployeeView"]/div[1]/div/div[2]/p')
+    except NoSuchElementException:
         print('Costco 1 Ran')
         return True
     print('Costco 1 Ran')
@@ -131,8 +118,10 @@ def costcooneCheck(driver):
 
 def costcotwoCheck(driver):
     driver.get('https://book-costcopharmacy.appointment-plus.com/cttb5n42/?e_id=5435#/')
-    driver.find_element_by_xpath('//*[@id="page-content"]/div/div[2]/div[3]/ul/li/a').click()
-    if driver.find_element_by_xpath('//*[@id="SelectEmployeeView"]/div[1]/div/div[2]/p').text != "We're sorry, but no clinics are available for the you selected. Please choose another clinic.":
+    driver.find_element_by_xpath('//*[@id="page-content"]/div/div[2]/div[3]/ul/li/a').click() 
+    try:
+        driver.find_element_by_xpath('//*[@id="SelectEmployeeView"]/div[1]/div/div[2]/p')
+    except NoSuchElementException:
         print('Costco 2 Ran')
         return True
     print('Costco 2 Ran')
@@ -288,6 +277,7 @@ async def on_ready():
                 await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.marianos.com/rx/covid-eligibility")
         except Exception:
             print("Mariano's Error") 
+        driver.implicitly_wait(7)    
         try:
             if costcooneCheck(driver) == True:
                 await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://book-costcopharmacy.appointment-plus.com/cttc019c/?e_id=5439#/") 
