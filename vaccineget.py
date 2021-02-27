@@ -271,8 +271,8 @@ def marianosCheck_CrystalLake(driver):
 async def on_ready():
     #Main starts here
     while True:
-        if  "01:30:00" <= datetime.now().strftime("%H:%M:%S") <= "07:30:00":
-            time.sleep(21600)
+        if  "01:30:00" <= datetime.now().strftime("%H:%M:%S") <= "06:30:00":
+            time.sleep(18000)
         driver = webdriver.FirefoxProfile(config.firefoxprofpath)
         driver.set_preference('dom.webdriver.enabled',False)
         driver = webdriver.Firefox(executable_path=config.geckopath,firefox_profile=driver)
