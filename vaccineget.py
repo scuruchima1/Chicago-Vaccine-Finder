@@ -9,6 +9,8 @@ from selenium.webdriver.common.keys import Keys
 import time
 import pprint
 import config 
+from datetime import datetime
+from datetime import timedelta
 import discord
 
 # zocdoc - https://www.zocdoc.com/vaccine/search/IL?flavor=state-search
@@ -269,6 +271,8 @@ def marianosCheck_CrystalLake(driver):
 async def on_ready():
     #Main starts here
     while True:
+        if  "01:30:00" <= datetime.now().strftime("%H:%M:%S") <= "07:30:00":
+            time.sleep(21600)
         driver = webdriver.FirefoxProfile(config.firefoxprofpath)
         driver.set_preference('dom.webdriver.enabled',False)
         driver = webdriver.Firefox(executable_path=config.geckopath,firefox_profile=driver)
