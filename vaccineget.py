@@ -122,22 +122,38 @@ def uicCheck(driver):
 
 def costcooneCheck(driver):
     driver.get('https://book-costcopharmacy.appointment-plus.com/cttc019c/?e_id=5439#/')
+    time.sleep(2)
+    if driver.find_element_by_xpath("/html/body").text == "" or driver.find_element_by_xpath("/html/body").text == None:
+        raise Exception('Page not loaded')
     driver.find_element_by_xpath('//*[@id="page-content"]/div/div[2]/div[3]/ul/li/a').click()
-    if driver.find_element_by_xpath('//*[@id="SelectEmployeeView"]/div[1]/div/div[2]/p').text != "We're sorry, but no clinics are available for the you selected. Please choose another clinic.":
+    time.sleep(2)
+    if driver.find_element_by_xpath("/html/body").text == "" or driver.find_element_by_xpath("/html/body").text == None:
+        raise Exception('Page not loaded')
+    try:
+        driver.find_element_by_xpath('//*[@id="SelectEmployeeView"]/div[1]/div/div[2]/p')
+    except NoSuchElementException:
         print('Costco 1 Ran')
-        return True
+        return True 
     print('Costco 1 Ran')
-    return False
+    return False 
 
 def costcotwoCheck(driver):
     driver.get('https://book-costcopharmacy.appointment-plus.com/cttb5n42/?e_id=5435#/')
+    time.sleep(2)
+    if driver.find_element_by_xpath("/html/body").text == "" or driver.find_element_by_xpath("/html/body").text == None:
+        raise Exception('Page not loaded')
     driver.find_element_by_xpath('//*[@id="page-content"]/div/div[2]/div[3]/ul/li/a').click()
-    if driver.find_element_by_xpath('//*[@id="SelectEmployeeView"]/div[1]/div/div[2]/p').text != "We're sorry, but no clinics are available for the you selected. Please choose another clinic.":
+    time.sleep(2)
+    if driver.find_element_by_xpath("/html/body").text == "" or driver.find_element_by_xpath("/html/body").text == None:
+        raise Exception('Page not loaded')
+    try:
+        driver.find_element_by_xpath('//*[@id="page-content"]/div/div[2]/div/div[3]')
+    except NoSuchElementException:
         print('Costco 2 Ran')
         return True
     print('Costco 2 Ran')
     return False
-
+    
 def jeweloscoCheck(driver):
     driver.get('https://www.mhealthappointments.com/covidappt')
     time.sleep(1)
@@ -283,11 +299,12 @@ async def on_ready():
                 await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://mychart-openscheduling.et1085.epichosted.com/MyChart/SignupAndSchedule/EmbeddedSchedule?id=30301&dept=10127001&vt=1055")
         except:
             print('UIC Error')
-        try:
-            if marianosCheck(driver) == True:
-                await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.marianos.com/rx/covid-eligibility")
-        except Exception:
-            print("Mariano's Error") 
+        # try:
+        #     if marianosCheck(driver) == True:
+        #         await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.marianos.com/rx/covid-eligibility")
+        # except Exception:
+        #     print("Mariano's Error")
+        driver.implicitly_wait(6)
         try:
             if costcooneCheck(driver) == True:
                 await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://book-costcopharmacy.appointment-plus.com/cttc019c/?e_id=5439#/") 
@@ -305,13 +322,13 @@ async def on_ready():
         except Exception:
             print('Walgreens Crystal Lake Error')
         driver.implicitly_wait(15)
-        try:
-            if marianosCheck_CrystalLake(driver) == True:
-                await client.guilds[0].channels[6].send(f"**Vaccine Found!**\nhttps://www.marianos.com/rx/covid-eligibility")
-        except Exception:
-            print('Marianos Crystal Lake Error')
+        # try:
+        #     if marianosCheck_CrystalLake(driver) == True:
+        #         await client.guilds[0].channels[6].send(f"**Vaccine Found!**\nhttps://www.marianos.com/rx/covid-eligibility")
+        # except Exception:
+        #     print('Marianos Crystal Lake Error')
         driver.quit()
-        time.sleep(10)
+        time.sleep(75)
     #Main ends here
 
 client.run(config.discordbotapikey)
