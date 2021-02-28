@@ -12,7 +12,7 @@ import config
 from datetime import datetime
 from datetime import timedelta
 import discord
-import analytics
+# import analytics
 
 # zocdoc - https://www.zocdoc.com/vaccine/search/IL?flavor=state-search
 # cvs - https://www.cvs.com/immunizations/covid-19-vaccine
@@ -51,7 +51,7 @@ def zocdocCheck(driver):
         path = f'//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[{str(articleNumber)}]/div/div[2]/div/div'
         if driver.find_element_by_xpath(path).text != "No upcoming appointments available":
             print("ZocDoc Ran")
-            analytics.sheets("Zocdoc")         
+            # analytics.sheets("Zocdoc")         
             return True
     driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/nav/span[2]/a').click()
 
@@ -59,7 +59,7 @@ def zocdocCheck(driver):
         path = f'//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[{str(articleNumber)}]/div/div[2]/div/div'
         if driver.find_element_by_xpath(path).text != "No upcoming appointments available":
             print("ZocDoc Ran")         
-            analytics.sheets("Zocdoc")
+            # analytics.sheets("Zocdoc")
             return True
     print("ZocDoc Ran")
     return False
@@ -69,7 +69,7 @@ def cvsCheck(driver):
     driver.find_element_by_xpath('/html/body/content/div/div/div/div[3]/div/div/div[2]/div/div[5]/div/div/div/div/div/div[1]/div[2]/div/div[2]/div/div/div/div/div[1]/ul/li[11]/div/a/span').click()
     if driver.find_element_by_xpath('/html/body/div[2]/div/div[17]/div/div/div/div/div/div[1]/div[2]/div/div/div[2]/div/div[6]/div/div/table/tbody/tr[2]/td[2]/span').text != "Fully Booked":
         print("CVS Ran")
-        analytics.sheets("CVS")
+        # analytics.sheets("CVS")
         return True
     print("CVS Ran")
     return False
@@ -85,7 +85,7 @@ def walmartCheck(driver):
     actions.perform()
     if driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[3]/section/div[2]/div/div[2]/h1').text != 'Not available in this area - yet':
         print('Walmart Ran')
-        analytics.sheets("Walmart")
+        # analytics.sheets("Walmart")
         return True
     print('Walmart Ran')
     return False
@@ -115,7 +115,7 @@ def walgreensCheck(driver):
         driver.find_element_by_xpath('//*[@id="wag-body-main-container"]/section/section/section/section/section[1]/p')
     except NoSuchElementException:
         print('Walgreens Ran')
-        analytics.sheets("Walgreens")
+        # analytics.sheets("Walgreens")
         return True
     print('Walgreens Ran')
     return False
@@ -124,7 +124,7 @@ def uicCheck(driver):
     driver.get('https://mychart-openscheduling.et1085.epichosted.com/MyChart/SignupAndSchedule/EmbeddedSchedule?id=30301&dept=10127001&vt=1055')
     if driver.find_element_by_xpath('//*[@id="D6F73C26-7627-4948-95EA-2C630C25C5E9_scheduleOpenings_OpeningsData"]/div/span/span[2]').text != "There are currently no vaccine appointments available. We are working hard to offer more vaccine appointments soon. Please check back daily.":
         print('UIC Health Ran')
-        analytics.sheets("UIC Health")
+        # analytics.sheets("UIC Health")
         return True
     print('UIC Health Ran')
     return False
@@ -142,7 +142,7 @@ def costcooneCheck(driver):
         driver.find_element_by_xpath('//*[@id="SelectEmployeeView"]/div[1]/div/div[2]/p')
     except NoSuchElementException:
         print('Costco 1 Ran')
-        analytics.sheets("Costco One")
+        # analytics.sheets("Costco One")
         return True 
     print('Costco 1 Ran')
     return False 
@@ -160,7 +160,7 @@ def costcotwoCheck(driver):
         driver.find_element_by_xpath('//*[@id="page-content"]/div/div[2]/div/div[3]')
     except NoSuchElementException:
         print('Costco 2 Ran')
-        analytics.sheets("Costco Two")
+        # analytics.sheets("Costco Two")
         return True
     print('Costco 2 Ran')
     return False
@@ -188,37 +188,37 @@ def jeweloscoCheck(driver):
     time.sleep(2)
     if driver.find_element_by_xpath('//*[@id="covid19-reg-v2"]/div/div[3]/div/div[2]/div/div[3]/div/div/form/div[2]/div[4]/div/p').text != checkstring:
         print('Jewel-Osco Ran')
-        analytics.sheets("Jewel-Osco")
+        # analytics.sheets("Jewel-Osco")
         return True
     Select(driver.find_element_by_xpath('//*[@id="item-type"]')).select_by_index(1)
     time.sleep(0.8)
     if driver.find_element_by_xpath('//*[@id="covid19-reg-v2"]/div/div[3]/div/div[2]/div/div[3]/div/div/form/div[2]/div[4]/div/p').text != checkstring:
         print('Jewel-Osco Ran')
-        analytics.sheets("Jewel-Osco")
+        # analytics.sheets("Jewel-Osco")
         return True
     Select(driver.find_element_by_xpath('//*[@id="item-type"]')).select_by_index(2)
     time.sleep(0.8)
     if driver.find_element_by_xpath('//*[@id="covid19-reg-v2"]/div/div[3]/div/div[2]/div/div[3]/div/div/form/div[2]/div[4]/div/p').text != checkstring:
         print('Jewel-Osco Ran')
-        analytics.sheets("Jewel-Osco")
+        # analytics.sheets("Jewel-Osco")
         return True
     Select(driver.find_element_by_xpath('//*[@id="item-type"]')).select_by_index(3)
     time.sleep(0.8)
     if driver.find_element_by_xpath('//*[@id="covid19-reg-v2"]/div/div[3]/div/div[2]/div/div[3]/div/div/form/div[2]/div[4]/div/p').text != checkstring:
         print('Jewel-Osco Ran')
-        analytics.sheets("Jewel-Osco")
+        # analytics.sheets("Jewel-Osco")
         return True
     Select(driver.find_element_by_xpath('//*[@id="item-type"]')).select_by_index(4)
     time.sleep(0.8)
     if driver.find_element_by_xpath('//*[@id="covid19-reg-v2"]/div/div[3]/div/div[2]/div/div[3]/div/div/form/div[2]/div[4]/div/p').text != checkstring:
         print('Jewel-Osco Ran')
-        analytics.sheets("Jewel-Osco")
+        # analytics.sheets("Jewel-Osco")
         return True
     Select(driver.find_element_by_xpath('//*[@id="item-type"]')).select_by_index(5)
     time.sleep(0.8)
     if driver.find_element_by_xpath('//*[@id="covid19-reg-v2"]/div/div[3]/div/div[2]/div/div[3]/div/div/form/div[2]/div[4]/div/p').text != checkstring:
         print('Jewel-Osco Ran')
-        analytics.sheets("Jewel-Osco")
+        # analytics.sheets("Jewel-Osco")
         return True
     return False
 
@@ -240,7 +240,7 @@ def marianosCheck(driver):
     driver.find_element_by_xpath('//*[@id="step1"]/div/div/div/div[2]/form/button').click()
     if driver.find_element_by_xpath('//*[@id="step1"]/div/div/div/div[3]/div/span').text != 'None of the locations in your search currently offer COVID-19 vaccines, please try another Zip Code, City, or State':
         print("Marianos Ran")
-        analytics.sheets("Marianos")
+        # analytics.sheets("Marianos")
         return True
     print("Marianos Ran")
     return False
@@ -257,7 +257,7 @@ def walgreensCheck_CrystalLake(driver):
         driver.find_element_by_xpath('//*[@id="wag-body-main-container"]/section/section/section/section/section[1]/p')
     except NoSuchElementException:
         print('Walgreens Crystal Lake Ran')
-        analytics.sheets("Walgreens Crystal Lake")
+        # analytics.sheets("Walgreens Crystal Lake")
         return True
     print('Walgreens Crystal Lake Ran')
     return False
@@ -280,7 +280,7 @@ def marianosCheck_CrystalLake(driver):
     driver.find_element_by_xpath('//*[@id="step1"]/div/div/div/div[2]/form/button').click()
     if driver.find_element_by_xpath('//*[@id="step1"]/div/div/div/div[3]/div/span').text != 'None of the locations in your search currently offer COVID-19 vaccines, please try another Zip Code, City, or State':
         print("Marianos Crystal Lake Ran")
-        analytics.sheets("Marianos Crystal Lake")
+        # analytics.sheets("Marianos Crystal Lake")
         return True
     print("Marianos Crystal Lake Ran")
     return False
