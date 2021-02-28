@@ -1,6 +1,8 @@
 # Byte-compiled / optimized / DLL files
 config.py
 geckodriver.log
+credentials.json
+token.pickle
 .vscode
 .DS_store
 __pycache__/
