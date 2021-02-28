@@ -12,7 +12,7 @@ import config
 from datetime import datetime
 from datetime import timedelta
 import discord
-import analytics
+# import analytics
 
 # zocdoc - https://www.zocdoc.com/vaccine/search/IL?flavor=state-search
 # cvs - https://www.cvs.com/immunizations/covid-19-vaccine
@@ -281,33 +281,33 @@ async def on_ready():
         try:
             if zocdocCheck(driver) == True:
                 await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.zocdoc.com/vaccine/search/IL?flavor=state-search")
-                analytics.sheets("Zocdoc")
+                # analytics.sheets("Zocdoc")
         except Exception:
             print('ZocDoc Error')
         try:
             if cvsCheck(driver) == True:
                 await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.cvs.com/immunizations/covid-19-vaccine?icid=cvs-home-hero1-link2-coronavirus-vaccine")
-                analytics.sheets("CVS")
+                # analytics.sheets("CVS")
         except Exception:
             print('CVS Error')
         try:
             if walmartCheck(driver) == True:
                 await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.walmart.com/pharmacy/clinical-services/immunization/scheduled?imzType=covid")
-                analytics.sheets("Walmart")
+                # analytics.sheets("Walmart")
 
         except:
             print('Walmart Error')
         try:
             if walgreensCheck(driver) == True:
                 await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.walgreens.com/findcare/vaccination/covid-19/location-screening")
-                analytics.sheets("Walgreens")
+                # analytics.sheets("Walgreens")
         except:
             print('Walgreens Error')
         driver.implicitly_wait(15)
         try:
             if uicCheck(driver) == True:
                 await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://mychart-openscheduling.et1085.epichosted.com/MyChart/SignupAndSchedule/EmbeddedSchedule?id=30301&dept=10127001&vt=1055")
-                analytics.sheets("UIC")
+                # analytics.sheets("UIC")
         except:
             print('UIC Error')
         # try:
@@ -319,20 +319,20 @@ async def on_ready():
         try:
             if costcooneCheck(driver) == True:
                 await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://book-costcopharmacy.appointment-plus.com/cttc019c/?e_id=5439#/")
-                analytics.sheets("Cosco One") 
+                # analytics.sheets("Cosco One") 
         except Exception:
             print('Costco One Error')
         try:
             if costcotwoCheck(driver) == True:
                 await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://book-costcopharmacy.appointment-plus.com/cttb5n42/?e_id=5435#/")
-                analytics.sheets("Cosco Two") 
+                # analytics.sheets("Cosco Two") 
         except Exception:
             print('Costco Two Error')
         driver.implicitly_wait(4)
         try:
             if walgreensCheck_CrystalLake(driver) == True:
                 await client.guilds[0].channels[6].send(f"**Vaccine Found!**\nhttps://www.walgreens.com/findcare/vaccination/covid-19/location-screening")
-                analytics.sheets("Walgreens Crystal Lake")
+                # analytics.sheets("Walgreens Crystal Lake")
         except Exception:
             print('Walgreens Crystal Lake Error')
         driver.implicitly_wait(15)
