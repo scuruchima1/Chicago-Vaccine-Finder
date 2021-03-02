@@ -43,7 +43,7 @@ def zocdocCheck(driver):
     driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[7]/div[3]/div[2]/div[2]/label/span[1]/input').click()
     driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[7]/div[4]/div[2]/div[2]/label/span[1]/input').click()
     driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[7]/button').click()
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[9]/div/div/div/label/input').click()
+    # driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[9]/div/div/div/label/input').click()
     driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[9]/button').click()
 
     # Cycling through all providers in ZocDoc
@@ -300,28 +300,33 @@ async def on_ready():
                 await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.zocdoc.com/vaccine/search/IL?flavor=state-search")
         except Exception:
             print('ZocDoc Error')
+            await client.guilds[0].channels[7].send(f"ZocDoc error {datetime.now().strftime('%H:%M:%S')}")
         try:
             if cvsCheck(driver) == True:
                 await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.cvs.com/immunizations/covid-19-vaccine?icid=cvs-home-hero1-link2-coronavirus-vaccine")
         except Exception:
             print('CVS Error')
+            await client.guilds[0].channels[7].send(f"CVS error {datetime.now().strftime('%H:%M:%S')}")
         try:
             if walmartCheck(driver) == True:
                 await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.walmart.com/pharmacy/clinical-services/immunization/scheduled?imzType=covid")
-
         except:
             print('Walmart Error')
+            await client.guilds[0].channels[7].send(f"Walmart error {datetime.now().strftime('%H:%M:%S')}")
+        driver.implicitly_wait(4)
         try:
             if walgreensCheck(driver) == True:
                 await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.walgreens.com/findcare/vaccination/covid-19/location-screening")
         except:
             print('Walgreens Error')
+            await client.guilds[0].channels[7].send(f"Walgreens error {datetime.now().strftime('%H:%M:%S')}")
         driver.implicitly_wait(15)
         try:
             if uicCheck(driver) == True:
                 await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://mychart-openscheduling.et1085.epichosted.com/MyChart/SignupAndSchedule/EmbeddedSchedule?id=30301&dept=10127001&vt=1055")
         except:
             print('UIC Error')
+            await client.guilds[0].channels[7].send(f"UIC error {datetime.now().strftime('%H:%M:%S')}")
         # try:
         #     if marianosCheck(driver) == True:
         #         await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.marianos.com/rx/covid-eligibility")
@@ -333,17 +338,20 @@ async def on_ready():
                 await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://book-costcopharmacy.appointment-plus.com/cttc019c/?e_id=5439#/")
         except Exception:
             print('Costco One Error')
+            await client.guilds[0].channels[7].send(f"Costco one error {datetime.now().strftime('%H:%M:%S')}")
         try:
             if costcotwoCheck(driver) == True:
                 await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://book-costcopharmacy.appointment-plus.com/cttb5n42/?e_id=5435#/")
         except Exception:
             print('Costco Two Error')
+            await client.guilds[0].channels[7].send(f"Costco two error {datetime.now().strftime('%H:%M:%S')}")
         driver.implicitly_wait(4)
         try:
             if walgreensCheck_CrystalLake(driver) == True:
                 await client.guilds[0].channels[6].send(f"**Vaccine Found!**\nhttps://www.walgreens.com/findcare/vaccination/covid-19/location-screening")
         except Exception:
             print('Walgreens Crystal Lake Error')
+            await client.guilds[0].channels[7].send(f"Walgreens crystal lake error {datetime.now().strftime('%H:%M:%S')}")
         driver.implicitly_wait(15)
         # try:
         #     if marianosCheck_CrystalLake(driver) == True:
