@@ -47,7 +47,7 @@ def zocdoc_check(driver):
             analytics.sheets("Zocdoc")         
             return True
     driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/nav/span[2]/a').click()
-    for articleNumber in range(1,3):
+    for articleNumber in range(1,7):
         path = f'//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[{str(articleNumber)}]/div/div[2]/div/div'
         if driver.find_element_by_xpath(path).text != "No upcoming appointments available":
             print("ZocDoc Ran")         
