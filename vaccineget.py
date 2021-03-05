@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.webdriver import FirefoxProfile
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains 
 from selenium.common.exceptions import NoSuchElementException     
 from selenium.webdriver.common.keys import Keys
@@ -12,8 +13,8 @@ import config
 from datetime import datetime
 from datetime import timedelta
 import discord
+import random
 import analytics
-import multiprocessing
 
 #Check for vaccines, send message through discord
 
@@ -22,37 +23,36 @@ def zocdoc_check(driver):
     Goes through 3 pages of https://www.zocdoc.com/vaccine, looks for no availibility string to
     return a false or true boolean. zocdoc - https://www.zocdoc.com/vaccine/search/IL?flavor=state-search
     """
-    driver.get("https://www.zocdoc.com/vaccine")
-    Select(driver.find_element_by_xpath('//*[@id="main"]/div/div[1]/section/div/div/div/div/div/div/select')).select_by_visible_text('Illinois')
-    driver.find_element_by_xpath('//*[@id="main"]/div/div[1]/section/div/div/div/div/button').click()
-    driver.find_element_by_xpath('//*[@id="age-input"]').send_keys('50')
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[1]/button').click()
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[2]/div[1]/div[2]/div[1]/label/span[1]/input').click()
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[2]/div[2]/div[2]/div[1]/label/span[1]/input').click()
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[2]/div[3]/div[2]/div[1]/label/span[1]/input').click()
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[2]/button').click()
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[7]/div[1]/div[2]/div[2]/label/span[1]/input').click()
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[7]/div[2]/div[2]/div[2]/label/span[1]/input').click()
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[7]/div[3]/div[2]/div[2]/label/span[1]/input').click()
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[7]/div[4]/div[2]/div[2]/label/span[1]/input').click()
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[7]/button').click()
-    # driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[9]/div/div/div/label/input').click()
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[9]/button').click()
-
+    driver.get("https://www.zocdoc.com/vaccine/search/IL?flavor=state-search")
+    # Select(driver.find_element_by_xpath('//*[@id="main"]/div/div[1]/section/div/div/div/div/div/div/select')).select_by_visible_text('Illinois')
+    # driver.find_element_by_xpath('//*[@id="main"]/div/div[1]/section/div/div/div/div/button').click()
+    # driver.find_element_by_xpath('//*[@id="age-input"]').send_keys('50')
+    # driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[1]/button').click()
+    # driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[2]/div[1]/div[2]/div[1]/label/span[1]/input').click()
+    # driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[2]/div[2]/div[2]/div[1]/label/span[1]/input').click()
+    # driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[2]/div[3]/div[2]/div[1]/label/span[1]/input').click()
+    # driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[2]/button').click()
+    # driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[8]/div[1]/div[2]/div[2]/label/span[1]/input').click()
+    # driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[8]/div[2]/div[2]/div[2]/label/span[1]/input').click()
+    # driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[8]/div[3]/div[2]/div[2]/label/span[1]/input').click()
+    # driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[8]/div[4]/div[2]/div[2]/label/span[1]/input').click()
+    # driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[8]/button').click()
+    # # driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[9]/div/div/div/label/input').click()
+    # driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[9]/button').click()
     # Cycling through all providers in ZocDoc
-    for articleNumber in range(1,18):
+    for articleNumber in range(2,15):
         path = f'//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[{str(articleNumber)}]/div/div[2]/div/div'
         if driver.find_element_by_xpath(path).text != "No upcoming appointments available":
             print("ZocDoc Ran")
             analytics.sheets("Zocdoc")         
             return True
-    driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/nav/span[2]/a').click()
-    for articleNumber in range(1,3):
-        path = f'//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[{str(articleNumber)}]/div/div[2]/div/div'
-        if driver.find_element_by_xpath(path).text != "No upcoming appointments available":
-            print("ZocDoc Ran")         
-            analytics.sheets("Zocdoc")
-            return True
+    # driver.find_element_by_xpath('//*[@id="main"]/div[1]/main/div/nav/span[2]/a').click()
+    # for articleNumber in range(1,3):
+    #     path = f'//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[{str(articleNumber)}]/div/div[2]/div/div'
+    #     if driver.find_element_by_xpath(path).text != "No upcoming appointments available":
+    #         print("ZocDoc Ran")         
+    #         # analytics.sheets("Zocdoc")
+    #         return True
     print("ZocDoc Ran")
     return False
 
@@ -75,7 +75,7 @@ def walmart_check(driver):
     Checks Chicago area for avaiable vaccine appointments.
     """
     driver.get('https://www.walmart.com/pharmacy/clinical-services/immunization/scheduled?imzType=covid')
-    driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[3]/section/div[2]/div/div[1]/div/div[2]/div/div/form/div[1]/input').clear()
+    driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[3]/section/div[2]/div/div[1]/div/div[2]/div/div/form/div[1]/input').clear()  
     driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[3]/section/div[2]/div/div[1]/div/div[2]/div/div/form/div[1]/input').send_keys('Chicago')
     driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[3]/section/div[2]/div/div[1]/div/div[2]/div/div/form/div[1]/input').click()
     actions = ActionChains(driver)
@@ -268,99 +268,129 @@ def marianos_check_crystal_lake(driver):
     print("Marianos Crystal Lake Ran")
     return False
 
-def main_one():
-    client = discord.Client()
+def walgreens_check_romeoville(driver):
+    driver.get('https://www.walgreens.com/findcare/vaccination/covid-19/location-screening')
+    driver.find_element_by_xpath('//*[@id="inputLocation"]').clear()
+    driver.find_element_by_xpath('//*[@id="inputLocation"]').send_keys('Romeoville')
+    driver.find_element_by_xpath('//*[@id="wag-body-main-container"]/section/section/section/section/section[2]/div/span/button').click()
+    #//*[@id="wag-body-main-container"]/section/section/section/section/section[2]/p for vaccine available
+    try:
+        driver.find_element_by_xpath('//*[@id="wag-body-main-container"]/section/section/section/section/section[1]/p')
+    except NoSuchElementException:
+        print('Walgreens Romeoville Ran')
+        analytics.sheets("Walgreens Romeoville")
+        return True
+    print('Walgreens Romeoville Ran')
+    return False
 
-    @client.event
-    async def on_ready():
-        #Main starts here
-        while True:
-            if  "01:30:00" <= datetime.now().strftime("%H:%M:%S") <= "06:30:00":
-                time.sleep(18000)
-            driver = webdriver.FirefoxProfile(config.firefoxprofpath)
-            driver.set_preference('dom.webdriver.enabled',False)
-            driver = webdriver.Firefox(executable_path=config.geckopath,firefox_profile=driver)
-            driver.implicitly_wait(15)
-            try:
-                if zocdoc_check(driver) == True:
-                    await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.zocdoc.com/vaccine/search/IL?flavor=state-search")
-            except Exception:
-                print('ZocDoc Error')
-                await client.guilds[0].channels[7].send(f"ZocDoc error {datetime.now().strftime('%H:%M:%S')}")
-            try:
-                if cvs_check(driver) == True:
-                    await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.cvs.com/immunizations/covid-19-vaccine?icid=cvs-home-hero1-link2-coronavirus-vaccine")
-            except Exception:
-                print('CVS Error')
-                await client.guilds[0].channels[7].send(f"CVS error {datetime.now().strftime('%H:%M:%S')}")
-            try:
-                if walmart_check(driver) == True:
-                    await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.walmart.com/pharmacy/clinical-services/immunization/scheduled?imzType=covid")
-            except:
-                print('Walmart Error')
-                await client.guilds[0].channels[7].send(f"Walmart error {datetime.now().strftime('%H:%M:%S')}")
-            driver.implicitly_wait(4)
-            try:
-                if walgreens_check(driver) == True:
-                    await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.walgreens.com/findcare/vaccination/covid-19/location-screening")
-            except:
-                print('Walgreens Error')
-                await client.guilds[0].channels[7].send(f"Walgreens error {datetime.now().strftime('%H:%M:%S')}")
-            driver.implicitly_wait(15)
-            driver.quit()
-            time.sleep(60)
-        #Main ends here
-    client.run(config.discordbotapikey)
+user_agents = ['Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.72 Safari/537.36'
+            ,'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.72 Safari/537.36'
+            ,'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.72 Safari/537.36'
+            ,'Mozilla/5.0 (iPhone; CPU iPhone OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/87.0.4280.77 Mobile/15E148 Safari/604.1'
+            ,'Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.72 Mobile Safari/537.36'
+            ,'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_2) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15'
+            ,'Mozilla/5.0 (iPhone; CPU iPhone OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1']
 
-def main_two():
-    client = discord.Client()
+client = discord.Client()
 
-    @client.event
-    async def on_ready():
-        #Main starts here
-        while True:
-            if  "01:30:00" <= datetime.now().strftime("%H:%M:%S") <= "06:30:00":
-                time.sleep(18000)
-            driver = webdriver.FirefoxProfile(config.firefoxprofpath)
-            driver.set_preference('dom.webdriver.enabled',False)
-            driver = webdriver.Firefox(executable_path=config.geckopath,firefox_profile=driver)
-            driver.implicitly_wait(15)
-            try:
-                if uic_check(driver) == True:
-                    await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://mychart-openscheduling.et1085.epichosted.com/MyChart/SignupAndSchedule/EmbeddedSchedule?id=30301&dept=10127001&vt=1055")
-            except:
-                print('UIC Error')
-                await client.guilds[0].channels[7].send(f"UIC error {datetime.now().strftime('%H:%M:%S')}")
-            driver.implicitly_wait(6)
-            try:
-                if costco_one_check(driver) == True:
-                    await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://book-costcopharmacy.appointment-plus.com/cttc019c/?e_id=5439#/")
-            except Exception:
-                print('Costco One Error')
-                await client.guilds[0].channels[7].send(f"Costco one error {datetime.now().strftime('%H:%M:%S')}")
-            try:
-                if costco_two_check(driver) == True:
-                    await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://book-costcopharmacy.appointment-plus.com/cttb5n42/?e_id=5435#/")
-            except Exception:
-                print('Costco Two Error')
-                await client.guilds[0].channels[7].send(f"Costco two error {datetime.now().strftime('%H:%M:%S')}")
-            driver.implicitly_wait(4)
-            try:
-                if walgreens_check_crystal_lake(driver) == True:
-                    await client.guilds[0].channels[6].send(f"**Vaccine Found!**\nhttps://www.walgreens.com/findcare/vaccination/covid-19/location-screening")
-            except Exception:
-                print('Walgreens Crystal Lake Error')
-                await client.guilds[0].channels[7].send(f"Walgreens crystal lake error {datetime.now().strftime('%H:%M:%S')}")
-            driver.implicitly_wait(15)
-            driver.quit()
-            time.sleep(60)
-        #Main ends here
-    client.run(config.discordbotapikey)
-
-if __name__ == "__main__":
-    p1 = multiprocessing.Process(target=main_one)
-    p2 = multiprocessing.Process(target=main_two)
-    p1.start()
-    p2.start()
-    p1.join()
-    p2.join()
+@client.event
+async def on_ready():
+    #Main starts here
+    while True:
+        if  "01:30:00" <= datetime.now().strftime("%H:%M:%S") <= "06:30:00":
+            time.sleep(18000)
+        # user_agent = random.choice(user_agents)
+        sitelist = [x for x in range(1,9)]
+        # options = webdriver.ChromeOptions()
+        # options.add_argument(f"user-data-dir={config.chromeprofpath}")
+        # options.add_experimental_option("excludeSwitches", ["enable-automation"])
+        # options.add_experimental_option('useAutomationExtension', False)
+        # driver = webdriver.Chrome(executable_path=config.chromepath,chrome_options=options)
+        preferences = webdriver.FirefoxProfile(config.firefoxprofpath)
+        preferences.set_preference('dom.webdriver.enabled',False)
+        preferences.set_preference('marionette.enabled',False)
+        # driver.set_preference("general.useragent.override", user_agent)
+        driver = webdriver.Firefox(executable_path=config.geckopath,firefox_profile=preferences)
+        driver.implicitly_wait(15)
+        while sitelist != []:
+            site = random.choice(sitelist)
+            if site == 1:
+                sitelist.remove(1)
+                #ZocDoc
+                try:
+                    if zocdoc_check(driver) == True:
+                        await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.zocdoc.com/vaccine/search/IL?flavor=state-search")
+                except Exception:
+                    print('ZocDoc Error')
+                    await client.guilds[0].channels[7].send(f"ZocDoc error {datetime.now().strftime('%H:%M:%S')}")
+            if site == 2:
+                sitelist.remove(2)
+                #CVS
+                try:
+                    if cvs_check(driver) == True:
+                        await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.cvs.com/immunizations/covid-19-vaccine?icid=cvs-home-hero1-link2-coronavirus-vaccine")
+                except Exception:
+                    print('CVS Error')
+                    await client.guilds[0].channels[7].send(f"CVS error {datetime.now().strftime('%H:%M:%S')}")
+            if site == 3:
+                sitelist.remove(3)
+                #Walmart
+                try:
+                    if walmart_check(driver) == True:
+                        await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.walmart.com/pharmacy/clinical-services/immunization/scheduled?imzType=covid")
+                except:
+                    print('Walmart Error')
+                    await client.guilds[0].channels[7].send(f"Walmart error {datetime.now().strftime('%H:%M:%S')}")
+            if site == 4:
+                sitelist.remove(4)
+                #Walgreens
+                driver.implicitly_wait(4)
+                try:
+                    if walgreens_check(driver) == True:
+                        await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.walgreens.com/")
+                except:
+                    print('Walgreens Error')
+                    await client.guilds[0].channels[7].send(f"Walgreens error {datetime.now().strftime('%H:%M:%S')}")
+                driver.implicitly_wait(15)
+            if site == 5:
+                sitelist.remove(5)
+                #UIC
+                try:
+                    if uic_check(driver) == True:
+                        await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://mychart-openscheduling.et1085.epichosted.com/MyChart/SignupAndSchedule/EmbeddedSchedule?id=30301&dept=10127001&vt=1055")
+                except:
+                    print('UIC Error')
+                    await client.guilds[0].channels[7].send(f"UIC error {datetime.now().strftime('%H:%M:%S')}")
+            if site == 6:
+                sitelist.remove(6)
+                #Costco one
+                driver.implicitly_wait(6)
+                try:
+                    if costco_one_check(driver) == True:
+                        await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://book-costcopharmacy.appointment-plus.com/cttc019c/?e_id=5439#/")
+                except Exception:
+                    print('Costco One Error')
+                    await client.guilds[0].channels[7].send(f"Costco one error {datetime.now().strftime('%H:%M:%S')}")
+            if site == 7:
+                sitelist.remove(7)
+                #Costco two
+                try:
+                    if costco_two_check(driver) == True:
+                        await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://book-costcopharmacy.appointment-plus.com/cttb5n42/?e_id=5435#/")
+                except Exception:
+                    print('Costco Two Error')
+                    await client.guilds[0].channels[7].send(f"Costco two error {datetime.now().strftime('%H:%M:%S')}")
+            if site == 8:
+                sitelist.remove(8)
+                #Walgreens romeoville
+                driver.implicitly_wait(4)
+                try:
+                    if walgreens_check_romeoville(driver) == True:
+                        await client.guilds[0].channels[6].send(f"**Vaccine Found!**\nhttps://book-costcopharmacy.appointment-plus.com/cttb5n42/?e_id=5435#/")
+                except Exception:
+                    print('Walgreens Romeoville Error')
+                    await client.guilds[0].channels[7].send(f"Walgreens romeoville error {datetime.now().strftime('%H:%M:%S')}")
+        driver.quit()
+        time.sleep(65)
+    #Main ends here
+client.run(config.discordbotapikey)
