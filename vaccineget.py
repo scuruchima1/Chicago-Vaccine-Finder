@@ -300,7 +300,7 @@ async def on_ready():
         if  "01:30:00" <= datetime.now().strftime("%H:%M:%S") <= "06:30:00":
             time.sleep(18000)
         # user_agent = random.choice(user_agents)
-        sitelist = [x for x in range(1,7)]
+        sitelist = [x for x in range(1,9)]
         # options = webdriver.ChromeOptions()
         # options.add_argument(f"user-data-dir={config.chromeprofpath}")
         # options.add_experimental_option("excludeSwitches", ["enable-automation"])
@@ -341,19 +341,19 @@ async def on_ready():
                 except:
                     print('Walmart Error')
                     await client.guilds[0].channels[7].send(f"Walmart error {datetime.now().strftime('%H:%M:%S')}")
-            # if site == 4:
-            #     sitelist.remove(4)
-            #     #Walgreens
-            #     driver.implicitly_wait(4)
-            #     try:
-            #         if walgreens_check(driver) == True:
-            #             await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.walgreens.com/")
-            #     except:
-            #         print('Walgreens Error')
-            #         await client.guilds[0].channels[7].send(f"Walgreens error {datetime.now().strftime('%H:%M:%S')}")
-            #     driver.implicitly_wait(15)
             if site == 4:
                 sitelist.remove(4)
+                #Walgreens
+                driver.implicitly_wait(4)
+                try:
+                    if walgreens_check(driver) == True:
+                        await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.walgreens.com/")
+                except:
+                    print('Walgreens Error')
+                    await client.guilds[0].channels[7].send(f"Walgreens error {datetime.now().strftime('%H:%M:%S')}")
+                driver.implicitly_wait(15)
+            if site == 5:
+                sitelist.remove(5)
                 #UIC
                 try:
                     if uic_check(driver) == True:
@@ -361,8 +361,8 @@ async def on_ready():
                 except:
                     print('UIC Error')
                     await client.guilds[0].channels[7].send(f"UIC error {datetime.now().strftime('%H:%M:%S')}")
-            if site == 5:
-                sitelist.remove(5)
+            if site == 6:
+                sitelist.remove(6)
                 #Costco one
                 driver.implicitly_wait(6)
                 try:
@@ -371,8 +371,8 @@ async def on_ready():
                 except Exception:
                     print('Costco One Error')
                     await client.guilds[0].channels[7].send(f"Costco one error {datetime.now().strftime('%H:%M:%S')}")
-            if site == 6:
-                sitelist.remove(6)
+            if site == 7:
+                sitelist.remove(7)
                 #Costco two
                 try:
                     if costco_two_check(driver) == True:
@@ -380,16 +380,16 @@ async def on_ready():
                 except Exception:
                     print('Costco Two Error')
                     await client.guilds[0].channels[7].send(f"Costco two error {datetime.now().strftime('%H:%M:%S')}")
-            # if site == 8:
-            #     sitelist.remove(8)
-            #     #Walgreens romeoville
-            #     driver.implicitly_wait(4)
-            #     try:
-            #         if walgreens_check_romeoville(driver) == True:
-            #             await client.guilds[0].channels[6].send(f"**Vaccine Found!**\nhttps://book-costcopharmacy.appointment-plus.com/cttb5n42/?e_id=5435#/")
-            #     except Exception:
-            #         print('Walgreens Romeoville Error')
-            #         await client.guilds[0].channels[7].send(f"Walgreens romeoville error {datetime.now().strftime('%H:%M:%S')}")
+            if site == 8:
+                sitelist.remove(8)
+                #Walgreens romeoville
+                driver.implicitly_wait(4)
+                try:
+                    if walgreens_check_romeoville(driver) == True:
+                        await client.guilds[0].channels[6].send(f"**Vaccine Found!**\nhttps://book-costcopharmacy.appointment-plus.com/cttb5n42/?e_id=5435#/")
+                except Exception:
+                    print('Walgreens Romeoville Error')
+                    await client.guilds[0].channels[7].send(f"Walgreens romeoville error {datetime.now().strftime('%H:%M:%S')}")
         driver.quit()
         time.sleep(65)
     #Main ends here
