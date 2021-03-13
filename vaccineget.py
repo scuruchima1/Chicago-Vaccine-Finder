@@ -1,3 +1,4 @@
+#External imports
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException  
 from selenium.webdriver.firefox.webdriver import FirefoxProfile
@@ -13,7 +14,7 @@ import discord
 import random
 import time
 
-#Local imports
+#Internal imports
 import config
 import analytics
 
@@ -95,18 +96,33 @@ def walgreens_check(driver,city):
     low implicit time.
     """
     driver.get('https://www.walgreens.com/login.jsp?ru=%2Ffindcare%2Fvaccination%2Fcovid-19%2Feligibility-survey%3Fflow%3Dcovidvaccine%26register%3Drx')
-    time.sleep(random.uniform(0.5,1.5))
-    driver.find_element_by_xpath('//*[@id="user_name"]').click()
-    actions1 = ActionChains(driver)
-    actions1.send_keys(config.walgreensuser)
-    actions1.perform()
-    time.sleep(random.uniform(0.5,1.5))
-    driver.find_element_by_xpath('//*[@id="user_password"]').click()
-    actions2 = ActionChains(driver)
-    actions2.send_keys(config.walgreenspass)
-    actions2.perform()
-    time.sleep(random.uniform(0.5,1.5))
-    driver.find_element_by_xpath('//*[@id="submit_btn"]').click()
+    try:
+        if driver.find_element_by_xpath('//*[@id="page-content"]/div[2]/div[1]/div/div/div/div[2]/div/div/div/div[1]/a').text == '':
+            driver.get('https://www.walgreens.com/findcare/vaccination/covid-19?ban=covid_scheduler_brandstory_main_March2021')
+            time.sleep(random.uniform(0.5,1.5))
+            driver.find_element_by_xpath('//*[@id="userOptionButtons"]/a/span').click()
+    except Exception:
+        time.sleep(random.uniform(0.5,1.5))
+        driver.find_element_by_xpath('//*[@id="user_name"]').click()
+        actions1 = ActionChains(driver)
+        actions1.send_keys(config.walgreensuser)
+        actions1.perform()
+        time.sleep(random.uniform(0.5,1.5))
+        driver.find_element_by_xpath('//*[@id="user_password"]').click()
+        actions2 = ActionChains(driver)
+        actions2.send_keys(config.walgreenspass)
+        actions2.perform()
+        time.sleep(random.uniform(0.5,1.5))
+        driver.find_element_by_xpath('//*[@id="submit_btn"]').click()
+        time.sleep(10)
+    if driver.current_url[0:50] == 'https://www.walgreens.com/profile/verify_identity.':
+        driver.find_element_by_xpath('//*[@id="radio-security"]').click()
+        time.sleep(random.uniform(0.5,1.5))
+        driver.find_element_by_xpath('//*[@id="optionContinue"]').click()
+        time.sleep(random.uniform(0.5,1.5))
+        driver.find_element_by_xpath('//*[@id="secQues"]').send_keys(config.walgreenssec)
+        time.sleep(random.uniform(0.5,1.5))
+        driver.find_element_by_xpath('//*[@id="validate_security_answer"]').click()
     time.sleep(random.uniform(0.5,1.5))
     driver.find_element_by_xpath('//*[@id="inputLocation"]').click()
     driver.find_element_by_xpath('//*[@id="inputLocation"]').clear()
@@ -152,7 +168,7 @@ def costco_one_check(driver):
     if driver.find_element_by_xpath("/html/body").text == "" or driver.find_element_by_xpath("/html/body").text == None:
         raise Exception('Page not loaded')
     try:
-        driver.find_element_by_xpath('//*[@id="SelectEmployeeView"]/div[1]/div/div[2]/p')
+        driver.find_element_by_xpath('//*[@id="page-content"]/div/div[2]/div/div[3]/div')
     except NoSuchElementException:
         print('Costco 1 Ran')
         analytics.sheets("Costco One")
