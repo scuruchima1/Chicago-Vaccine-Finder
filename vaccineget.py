@@ -80,7 +80,7 @@ def walmart_check(driver):
             print('Walmart Ran')
             analytics.sheets("Walmart")
             return True
-    for slot_number in range(2,8):
+    for slot_number in range(1,18):
         driver.find_element_by_xpath(f'/html/body/div/div/div[1]/article/div/div[2]/div/div/button[{slot_number}]').click()
         if driver.find_element_by_xpath('/html/body/div/div/div[1]/article/div/div[3]/span').text != "There are no appointments available for this store right now. Please try another store.":
             print('Walmart Ran')
