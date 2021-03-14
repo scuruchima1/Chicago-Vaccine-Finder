@@ -72,23 +72,32 @@ def walmart_check(driver):
     driver.get('https://www.walmart.com/pharmacy/clinical-services/immunization/scheduled?imzType=covid')
     time.sleep(1)
     driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[4]/button').click()
-    driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[2]/section[10]/label').click()
-    driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[3]/button[2]').click()
-    driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[3]/button').click()
-
-    if driver.find_element_by_xpath('/html/body/div/div/div[1]/article/div/div[3]/span').text != "There are no appointments available for this store right now. Please try another store.":
-            print('Walmart Ran')
-            analytics.sheets("Walmart")
-            return True
-    for slot_number in range(1,18):
-        driver.find_element_by_xpath(f'/html/body/div/div/div[1]/article/div/div[2]/div/div/button[{slot_number}]').click()
-        if driver.find_element_by_xpath('/html/body/div/div/div[1]/article/div/div[3]/span').text != "There are no appointments available for this store right now. Please try another store.":
-            print('Walmart Ran')
-            analytics.sheets("Walmart")
-            return True
+    try:
+        driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/article/div/div[2]')
+    except Exception:
+        print('Walmart Ran')
+        analytics.sheets("Walmart")
+        return True
     print('Walmart Ran')
     return False
+    # driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[2]/section[10]/label').click()
+    # driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[3]/button[2]').click()
+    # driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[3]/button').click()
 
+    # if driver.find_element_by_xpath('/html/body/div/div/div[1]/article/div/div[3]/span').text != "There are no appointments available for this store right now. Please try another store.":
+    #         print('Walmart Ran')
+    #         analytics.sheets("Walmart")
+    #         return True
+    # for slot_number in range(1,18):
+    #     driver.find_element_by_xpath(f'/html/body/div/div/div[1]/article/div/div[2]/div/div/button[{slot_number}]').click()
+    #     if driver.find_element_by_xpath('/html/body/div/div/div[1]/article/div/div[3]/span').text != "There are no appointments available for this store right now. Please try another store.":
+    #         print('Walmart Ran')
+    #         analytics.sheets("Walmart")
+    #         return True
+    # print('Walmart Ran')
+    # return False
+
+#Firefox should have ad and tracker blockers to help bypass bot detection
 def walgreens_check(driver,city):
     """
     Checks Chicago availability by checking if vaccine not avaible
@@ -97,11 +106,6 @@ def walgreens_check(driver,city):
     """
     driver.get('https://www.walgreens.com/login.jsp?ru=%2Ffindcare%2Fvaccination%2Fcovid-19%2Feligibility-survey%3Fflow%3Dcovidvaccine%26register%3Drx')
     try:
-        if driver.find_element_by_xpath('//*[@id="page-content"]/div[2]/div[1]/div/div/div/div[2]/div/div/div/div[1]/a').text == '':
-            driver.get('https://www.walgreens.com/findcare/vaccination/covid-19?ban=covid_scheduler_brandstory_main_March2021')
-            time.sleep(random.uniform(0.5,1.5))
-            driver.find_element_by_xpath('//*[@id="userOptionButtons"]/a/span').click()
-    except Exception:
         time.sleep(random.uniform(0.5,1.5))
         driver.find_element_by_xpath('//*[@id="user_name"]').click()
         actions1 = ActionChains(driver)
@@ -115,6 +119,10 @@ def walgreens_check(driver,city):
         time.sleep(random.uniform(0.5,1.5))
         driver.find_element_by_xpath('//*[@id="submit_btn"]').click()
         time.sleep(10)
+    except Exception:
+        driver.get('https://www.walgreens.com/findcare/vaccination/covid-19?ban=covid_scheduler_brandstory_main_March2021')
+        time.sleep(random.uniform(0.5,1.5))
+        driver.find_element_by_xpath('//*[@id="userOptionButtons"]/a/span').click()      
     if driver.current_url[0:50] == 'https://www.walgreens.com/profile/verify_identity.':
         driver.find_element_by_xpath('//*[@id="radio-security"]').click()
         time.sleep(random.uniform(0.5,1.5))
@@ -377,7 +385,7 @@ def walgreens_main():
         while True:
             if  "01:30:00" <= datetime.now().strftime("%H:%M:%S") <= "06:30:00":
                 time.sleep(18000)
-            sitelist = [x for x in range(1,3)]
+            sitelist = [x for x in range(1,2)]
             ua = UserAgent()
             userAgent = ua.random
             preferences = webdriver.FirefoxProfile(config.firefoxprofpath)
@@ -391,7 +399,7 @@ def walgreens_main():
                 if site == 1:
                     sitelist.remove(1)
                     #Walgreens
-                    driver.implicitly_wait(4)
+                    driver.implicitly_wait(6)
                     try:
                         if walgreens_check(driver,'Chicago') == True:
                             await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.walgreens.com/findcare/vaccination/covid-19/location-screening")
@@ -399,23 +407,23 @@ def walgreens_main():
                         print('Walgreens Chicago Error')
                         await client.guilds[0].channels[7].send(f"Walgreens error {datetime.now().strftime('%H:%M:%S')}")
                     driver.implicitly_wait(15)
-                if site == 2:
-                    sitelist.remove(2)
-                    #Walgreens romeoville
-                    driver.implicitly_wait(4)
-                    try:
-                        if walgreens_check(driver,'Berwyn') == True:
-                            await client.guilds[0].channels[6].send(f"**Vaccine Found!**\nhttps://www.walgreens.com/findcare/vaccination/covid-19/location-screening")
-                    except Exception:
-                        print('Walgreens Berwyn Error')
-                        await client.guilds[0].channels[7].send(f"Walgreens Berwyn error {datetime.now().strftime('%H:%M:%S')}")
+                # if site == 2:
+                #     sitelist.remove(2)
+                #     #Walgreens romeoville
+                #     driver.implicitly_wait(4)
+                #     try:
+                #         if walgreens_check(driver,'Berwyn') == True:
+                #             await client.guilds[0].channels[6].send(f"**Vaccine Found!**\nhttps://www.walgreens.com/findcare/vaccination/covid-19/location-screening")
+                #     except Exception:
+                #         print('Walgreens Berwyn Error')
+                #         await client.guilds[0].channels[7].send(f"Walgreens Berwyn error {datetime.now().strftime('%H:%M:%S')}")
             driver.quit()
             time.sleep(random.randint(200,230))
         #Main ends here
     client.run(config.discordbotapikey)
 
 if __name__ == '__main__':
-    run_walgreens = False
+    run_walgreens = True
     if run_walgreens == True:
         p1 = multiprocessing.Process(target=main)
         p2 = multiprocessing.Process(target=walgreens_main)
