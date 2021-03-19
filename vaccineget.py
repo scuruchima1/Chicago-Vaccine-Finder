@@ -32,14 +32,14 @@ def zocdoc_check(driver):
     driver.find_element_by_xpath('//*[@id="age-input"]').send_keys('70')
     driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[1]/button').click()
     #Second Page
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[10]/div[1]/div[2]/div[2]/label/span[1]/input').click()
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[10]/div[2]/div[2]/div[2]/label/span[1]/input').click()
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[10]/div[3]/div[2]/div[2]/label/span[1]/input').click()
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[10]/div[4]/div[2]/div[2]/label/span[1]/input').click()
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[10]/button').click()
+    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[11]/div[1]/div[2]/div[2]/label/span[1]/input').click()
+    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[11]/div[2]/div[2]/div[2]/label/span[1]/input').click()
+    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[11]/div[3]/div[2]/div[2]/label/span[1]/input').click()
+    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[11]/div[4]/div[2]/div[2]/label/span[1]/input').click()
+    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[11]/button').click()
     #Third Page
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[12]/div/div[1]/div/label/input').click()
-    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[12]/button').click()
+    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[13]/div/div[1]/div/label/input').click()
+    driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[13]/button').click()
     # Availability Page
     # Cycling through all providers in ZocDoc
     for articleNumber in range(1,18):
@@ -71,6 +71,7 @@ def walmart_check(driver):
     """
     driver.get('https://www.walmart.com/pharmacy/clinical-services/immunization/scheduled?imzType=covid')
     time.sleep(1)
+    driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[3]/section/div[2]/div/div[2]/div[2]/label/span').click()
     driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[4]/button').click()
     try:
         driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/article/div/div[2]')
@@ -338,7 +339,7 @@ def main():
                     try:
                         if walmart_check(driver) == True:
                             await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.walmart.com/pharmacy/clinical-services/immunization/scheduled?imzType=covid")
-                    except:
+                    except Exception:
                         print('Walmart Error')
                         await client.guilds[0].channels[7].send(f"Walmart error {datetime.now().strftime('%H:%M:%S')}")
                 if site == 4:
@@ -348,7 +349,7 @@ def main():
                     try:
                         if uic_check(driver) == True:
                             await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://mychart-openscheduling.et1085.epichosted.com/MyChart/SignupAndSchedule/EmbeddedSchedule?id=30301&dept=10127001&vt=1055")
-                    except:
+                    except Exception:
                         print('UIC Error')
                         await client.guilds[0].channels[7].send(f"UIC error {datetime.now().strftime('%H:%M:%S')}")
                     driver.implicitly_wait(15)
@@ -373,6 +374,10 @@ def main():
                         await client.guilds[0].channels[7].send(f"Costco two error {datetime.now().strftime('%H:%M:%S')}")
             driver.quit()
             time.sleep(65)
+            try:
+                driver.quit()
+            except Exception:
+                pass
         #Main ends here
     client.run(config.discordbotapikey)
 
@@ -403,7 +408,7 @@ def walgreens_main():
                     try:
                         if walgreens_check(driver,'Chicago') == True:
                             await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.walgreens.com/findcare/vaccination/covid-19/location-screening")
-                    except:
+                    except Exception:
                         print('Walgreens Chicago Error')
                         await client.guilds[0].channels[7].send(f"Walgreens error {datetime.now().strftime('%H:%M:%S')}")
                     driver.implicitly_wait(15)
@@ -419,6 +424,10 @@ def walgreens_main():
                 #         await client.guilds[0].channels[7].send(f"Walgreens Berwyn error {datetime.now().strftime('%H:%M:%S')}")
             driver.quit()
             time.sleep(random.randint(200,230))
+            try:
+                driver.quit()
+            except Exception:
+                pass
         #Main ends here
     client.run(config.discordbotapikey)
 
