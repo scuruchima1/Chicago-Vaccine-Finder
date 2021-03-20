@@ -13,6 +13,7 @@ import multiprocessing
 import discord
 import random
 import time
+import pickle
 
 #Internal imports
 import config
@@ -42,7 +43,7 @@ def zocdoc_check(driver):
     driver.find_element_by_xpath('//*[@id="main"]/div/div/div[3]/div/div[13]/button').click()
     # Availability Page
     # Cycling through all providers in ZocDoc
-    for articleNumber in range(1,18):
+    for articleNumber in range(1,18): 
         path = f'//*[@id="main"]/div[1]/main/div/div[2]/div/div/div/div/section/article[{str(articleNumber)}]/div/div[2]/div/div'
         if driver.find_element_by_xpath(path).text != "No upcoming appointments available":
             print("ZocDoc Ran")
@@ -73,30 +74,30 @@ def walmart_check(driver):
     time.sleep(1)
     driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[3]/section/div[2]/div/div[2]/div[2]/label/span').click()
     driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[4]/button').click()
-    try:
-        driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/article/div/div[2]')
-    except Exception:
-        print('Walmart Ran')
-        analytics.sheets("Walmart")
-        return True
-    print('Walmart Ran')
-    return False
-    # driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[2]/section[10]/label').click()
-    # driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[3]/button[2]').click()
-    # driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[3]/button').click()
-
-    # if driver.find_element_by_xpath('/html/body/div/div/div[1]/article/div/div[3]/span').text != "There are no appointments available for this store right now. Please try another store.":
-    #         print('Walmart Ran')
-    #         analytics.sheets("Walmart")
-    #         return True
-    # for slot_number in range(1,18):
-    #     driver.find_element_by_xpath(f'/html/body/div/div/div[1]/article/div/div[2]/div/div/button[{slot_number}]').click()
-    #     if driver.find_element_by_xpath('/html/body/div/div/div[1]/article/div/div[3]/span').text != "There are no appointments available for this store right now. Please try another store.":
-    #         print('Walmart Ran')
-    #         analytics.sheets("Walmart")
-    #         return True
+    # try:
+    #     driver.find_element_by_xpath('/html/body/div[1]/div/div[1]/article/div/div[2]')
+    # except Exception:
+    #     print('Walmart Ran')
+    #     analytics.sheets("Walmart")
+    #     return True
     # print('Walmart Ran')
     # return False
+    driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[2]/section[10]/label').click()
+    driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[3]/button[2]').click()
+    driver.find_element_by_xpath('/html/body/div/div/div[1]/article/section[3]/button').click()
+
+    if driver.find_element_by_xpath('/html/body/div/div/div[1]/article/div/div[3]/span').text != "There are no appointments available for this store right now. Please try another store.":
+            print('Walmart Ran')
+            analytics.sheets("Walmart")
+            return True
+    for slot_number in range(1,8):
+        driver.find_element_by_xpath(f'/html/body/div/div/div[1]/article/div/div[2]/div/div/button[{slot_number}]').click()
+        if driver.find_element_by_xpath('/html/body/div/div/div[1]/article/div/div[3]/span').text != "There are no appointments available for this store right now. Please try another store.":
+            print('Walmart Ran')
+            analytics.sheets("Walmart")
+            return True
+    print('Walmart Ran')
+    return False
 
 #Firefox should have ad and tracker blockers to help bypass bot detection
 def walgreens_check(driver,city):
@@ -214,15 +215,23 @@ def jewel_osco_check(driver):
     through calendar to check for dates at jewel osco locations.
     Needs captcha solved in firefox profile to work consistently.
     """
-    driver.get('https://www.mhealthappointments.com/covidappt')
     time.sleep(1)
     driver.find_element_by_xpath('//*[@id="covid_vaccine_search_input"]').click()
-    actions= ActionChains(driver)
+    actions = ActionChains(driver)
     actions.send_keys("60607")
     actions.perform()
     driver.find_element_by_xpath('//*[@id="fifteenMile-covid_vaccine_search"]').click()
     driver.find_element_by_xpath('//*[@id="covid_vaccine_search"]/div[2]/div[2]/button').click()   
     driver.find_element_by_xpath('//*[@id="attestation_1002"]').click()
+    driver.get('kordinator.mhealthcoach.net')
+    try:
+        cookies = pickle.load(open("cookies.json", "rb"))
+        for cookie in cookies:
+            driver.add_cookie(cookie)
+            # print(cookie)
+    except Exception:
+        print('Cookies not imported')
+    driver.get('https://www.mhealthappointments.com/covidappt')
     actions.send_keys(Keys.TAB + Keys.TAB + Keys.TAB + Keys.TAB + Keys.TAB + Keys.TAB + Keys.TAB + " ")
     actions.perform()
     time.sleep(2)
@@ -238,7 +247,7 @@ def jewel_osco_check(driver):
         print('Jewel-Osco Ran')
         analytics.sheets("Jewel-Osco")
         return True
-    for i in range(1,6):
+    for i in range(1,7):
         Select(driver.find_element_by_xpath('//*[@id="item-type"]')).select_by_index(i)
         time.sleep(0.8)
         if driver.find_element_by_xpath('//*[@id="covid19-reg-v2"]/div/div[3]/div/div[2]/div/div[3]/div/div/form/div[2]/div[4]/div/p').text != checkstring:
@@ -252,47 +261,34 @@ def marianos_check(driver):
     driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li/div/div[2]/div[2]/div/div/div/button[1]').click()
     driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[3]/div/div[2]/div[2]/div/div/div/button[2]').click()
     Select(driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[5]/div/div[2]/div[2]/div/div/div/select')).select_by_visible_text('IL')
+    # Select(driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[6]/div/div[2]/div[2]/div/div/div/select')).select_by_visible_text('City of Chicago')
     driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[6]/div/div[2]/div[2]/div/div/div/button[2]').click()
     driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[8]/div/div[2]/div[2]/div/div/div/button[2]').click()
-    driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[10]/div/div[2]/div[2]/div/div/div/div/form/div[1]/input').send_keys('01011970')
-    driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[10]/div/div[2]/div[2]/div/div/div/div/form/div[2]/button').click()
-    Select(driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[11]/div/div[2]/div[2]/div/div/div/select')).select_by_visible_text('Manufacturing')
-    driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[12]/div/div[2]/div[2]/div/div/div/button').click()
-    driver.find_element_by_xpath('//*[@id="step1"]/div/div/div/div[2]/form/div/div[1]/div').click()
+    #Cant input birthdate, try Actions and possibly delete everything below and start over.
+    driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[10]/div/div[2]/div[2]/div/div/div/div/form/div[1]/input').click()
     actions = ActionChains(driver)
-    actions.send_keys('Chicago')
+    actions.send_keys('10011950')
     actions.perform()
+    driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[10]/div/div[2]/div[2]/div/div/div/div/form/div[2]/button').click()
+    driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[11]/div/div[2]/div[2]/div/div/div/button').click()
+    driver.find_element_by_xpath('//*[@id="step1"]/div/div/div/div[1]/span').click()
+    actionscity = ActionChains(driver)
+    actionscity.send_keys(Keys.TAB)
+    for x in range(2):
+        actionscity.perform()
+    time.sleep(1)
+    actionsenter = ActionChains(driver)
+    actionsenter.send_keys('Chicago')
+    actionsenter.perform()
     driver.find_element_by_xpath('//*[@id="step1"]/div/div/div/div[2]/form/button').click()
-    if driver.find_element_by_xpath('//*[@id="step1"]/div/div/div/div[3]/div/span').text != 'None of the locations in your search currently offer COVID-19 vaccines, please try another Zip Code, City, or State':
+    
+    try:
+        driver.find_element_by_xpath('//*[@id="step1"]/div/div/div/div[3]/div/span')
+    except NoSuchElementException:
         print("Marianos Ran")
         analytics.sheets("Marianos")
         return True
     print("Marianos Ran")
-    return False
-    
-# Crystal Lake Vaccination Checks
-
-def marianos_check_crystal_lake(driver):
-    driver.get('https://www.marianos.com/rx/covid-eligibility')
-    driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li/div/div[2]/div[2]/div/div/div/button[1]').click()
-    driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[3]/div/div[2]/div[2]/div/div/div/button[2]').click()
-    Select(driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[5]/div/div[2]/div[2]/div/div/div/select')).select_by_visible_text('IL')
-    driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[6]/div/div[2]/div[2]/div/div/div/button[2]').click()
-    driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[8]/div/div[2]/div[2]/div/div/div/button[2]').click()
-    driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[10]/div/div[2]/div[2]/div/div/div/div/form/div[1]/input').send_keys('01011970')
-    driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[10]/div/div[2]/div[2]/div/div/div/div/form/div[2]/button').click()
-    Select(driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[11]/div/div[2]/div[2]/div/div/div/select')).select_by_visible_text('Manufacturing')
-    driver.find_element_by_xpath('//*[@id="content"]/div/section[2]/div/div/div/div/div/div/div/div/div/div/ul/li[12]/div/div[2]/div[2]/div/div/div/button').click()
-    driver.find_element_by_xpath('//*[@id="step1"]/div/div/div/div[2]/form/div/div[1]/div').click()
-    actions = ActionChains(driver)
-    actions.send_keys('Crystal Lake')
-    actions.perform()
-    driver.find_element_by_xpath('//*[@id="step1"]/div/div/div/div[2]/form/button').click()
-    if driver.find_element_by_xpath('//*[@id="step1"]/div/div/div/div[3]/div/span').text != 'None of the locations in your search currently offer COVID-19 vaccines, please try another Zip Code, City, or State':
-        print("Marianos Crystal Lake Ran")
-        analytics.sheets("Marianos Crystal Lake")
-        return True
-    print("Marianos Crystal Lake Ran")
     return False
 
 def main():
@@ -304,7 +300,7 @@ def main():
         while True:
             if  "01:30:00" <= datetime.now().strftime("%H:%M:%S") <= "06:30:00":
                 time.sleep(18000)
-            sitelist = [x for x in range(1,7)]
+            sitelist = [x for x in range(1,8)]
             ua = UserAgent()
             userAgent = ua.random
             preferences = webdriver.FirefoxProfile(config.firefoxprofpath)
@@ -312,6 +308,7 @@ def main():
             preferences.set_preference('marionette.enabled',False)
             preferences.set_preference("general.useragent.override", userAgent)
             driver = webdriver.Firefox(executable_path=config.geckopath,firefox_profile=preferences)
+            driver.get("http://www.google.com")
             driver.implicitly_wait(15)
             while sitelist != []:
                 site = random.choice(sitelist)
@@ -336,12 +333,14 @@ def main():
                 if site == 3:
                     sitelist.remove(3)
                     #Walmart
+                    driver.implicitly_wait(4)
                     try:
                         if walmart_check(driver) == True:
                             await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.walmart.com/pharmacy/clinical-services/immunization/scheduled?imzType=covid")
                     except Exception:
                         print('Walmart Error')
                         await client.guilds[0].channels[7].send(f"Walmart error {datetime.now().strftime('%H:%M:%S')}")
+                    driver.implicitly_wait(15)
                 if site == 4:
                     sitelist.remove(4)
                     #UIC
@@ -363,15 +362,29 @@ def main():
                     except Exception:
                         print('Costco One Error')
                         await client.guilds[0].channels[7].send(f"Costco one error {datetime.now().strftime('%H:%M:%S')}")
+                    driver.implicitly_wait(15)
                 if site == 6:
                     sitelist.remove(6)
                     #Costco two
+                    driver.implicitly_wait(6)
                     try:
                         if costco_two_check(driver) == True:
                             await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://book-costcopharmacy.appointment-plus.com/cttb5n42/?e_id=5435#/")
                     except Exception:
                         print('Costco Two Error')
                         await client.guilds[0].channels[7].send(f"Costco two error {datetime.now().strftime('%H:%M:%S')}")
+                    driver.implicitly_wait(15)
+                if site == 7:
+                    sitelist.remove(7)
+                    #Marianos
+                    driver.implicitly_wait(5)
+                    try:
+                        if marianos_check(driver) == True:
+                            await client.guilds[0].channels[2].send(f"**Vaccine Found!**\nhttps://www.marianos.com/rx/covid-eligibility")
+                    except Exception:
+                        print('Marianos Error')
+                        await client.guilds[0].channels[7].send(f"Marianos error {datetime.now().strftime('%H:%M:%S')}")
+                    driver.implicitly_wait(15)
             driver.quit()
             time.sleep(65)
             try:
@@ -390,7 +403,7 @@ def walgreens_main():
         while True:
             if  "01:30:00" <= datetime.now().strftime("%H:%M:%S") <= "06:30:00":
                 time.sleep(18000)
-            sitelist = [x for x in range(1,2)]
+            sitelist = [x for x in range(1,3)]
             ua = UserAgent()
             userAgent = ua.random
             preferences = webdriver.FirefoxProfile(config.firefoxprofpath)
@@ -412,16 +425,16 @@ def walgreens_main():
                         print('Walgreens Chicago Error')
                         await client.guilds[0].channels[7].send(f"Walgreens error {datetime.now().strftime('%H:%M:%S')}")
                     driver.implicitly_wait(15)
-                # if site == 2:
-                #     sitelist.remove(2)
-                #     #Walgreens romeoville
-                #     driver.implicitly_wait(4)
-                #     try:
-                #         if walgreens_check(driver,'Berwyn') == True:
-                #             await client.guilds[0].channels[6].send(f"**Vaccine Found!**\nhttps://www.walgreens.com/findcare/vaccination/covid-19/location-screening")
-                #     except Exception:
-                #         print('Walgreens Berwyn Error')
-                #         await client.guilds[0].channels[7].send(f"Walgreens Berwyn error {datetime.now().strftime('%H:%M:%S')}")
+                if site == 2:
+                    sitelist.remove(2)
+                    #Walgreens Wauconda
+                    driver.implicitly_wait(6)
+                    try:
+                        if walgreens_check(driver,'Wauconda') == True:
+                            await client.guilds[0].channels[6].send(f"**Vaccine Found!**\nhttps://www.walgreens.com/findcare/vaccination/covid-19/location-screening")
+                    except Exception:
+                        print('Walgreens Wauconda Error')
+                        await client.guilds[0].channels[7].send(f"Walgreens Wauconda error {datetime.now().strftime('%H:%M:%S')}")
             driver.quit()
             time.sleep(random.randint(200,230))
             try:

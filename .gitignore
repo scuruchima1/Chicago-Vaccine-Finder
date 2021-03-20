@@ -3,6 +3,7 @@ config.py
 geckodriver.log
 credentials.json
 token.pickle
+getcookies.py
 .vscode
 .DS_store
 __pycache__/
